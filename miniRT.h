@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 18:08:16 by abenamar          #+#    #+#             */
-/*   Updated: 2024/01/20 17:26:01 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/01/20 18:04:40 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@
 # define __ERR_13	"Error: invalid distance (not greater or equal to 0)\n"
 
 ssize_t		ft_pstderr(const char *str);
+void		ft_perror(const char *str);
 
 void		ft_tab_free(char **tab);
 size_t		ft_tab_size(char **tab);
