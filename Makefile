@@ -6,7 +6,7 @@
 #    By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/28 18:35:02 by abenamar          #+#    #+#              #
-#    Updated: 2024/01/20 14:51:52 by abenamar         ###   ########.fr        #
+#    Updated: 2024/01/20 18:05:50 by abenamar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,6 +36,7 @@ LDLIBS += -lm
 # **************************************************************************** #
 
 SRCS := ft_pstderr.c
+SRCS += ft_perror.c
 
 SRCS += ft_tab_free.c
 SRCS += ft_tab_size.c
