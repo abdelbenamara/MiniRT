@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 11:00:24 by abenamar          #+#    #+#             */
-/*   Updated: 2024/01/20 17:19:45 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/01/20 18:05:05 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ t_scene	*ft_scene_new(char *file)
 
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
-		return (perror(file), NULL);
+		return (ft_perror(file), NULL);
 	scene = malloc(sizeof(t_scene));
 	if (!scene)
 		return (ft_pstderr(__ERR_2), NULL);
@@ -72,7 +72,7 @@ t_scene	*ft_scene_new(char *file)
 	scene->cylinders = NULL;
 	init = ft_scene_init(scene, fd);
 	if (close(fd) == -1)
-		return (perror(file), ft_scene_free(scene), NULL);
+		return (ft_perror(file), ft_scene_free(scene), NULL);
 	if (!init)
 		return (ft_scene_free(scene), NULL);
 	return (scene);
