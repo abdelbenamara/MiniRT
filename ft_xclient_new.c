@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 18:21:54 by abenamar          #+#    #+#             */
-/*   Updated: 2023/12/30 23:25:24 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/01/21 19:09:01 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,20 +18,14 @@ t_xclient	*ft_xclient_new(t_scene *scene)
 
 	xclient = malloc(sizeof(t_xclient));
 	if (!xclient)
-		return (NULL);
-	xclient->mlx = NULL;
-	xclient->win = NULL;
-	xclient->ximage.img = NULL;
-	xclient->xsettings.scene = scene;
-	ft_xsettings_reset(&xclient->xsettings);
+		return (ft_scene_free(scene), NULL);
 	xclient->mlx = mlx_init();
-	if (!(xclient->mlx))
+	xclient->win = NULL;
+	xclient->scene = scene;
+	if (!xclient->mlx)
 		return (ft_xclient_free(xclient), NULL);
-	xclient->win = mlx_new_window(xclient->mlx, WIDTH, HEIGHT, TITLE);
-	if (!(xclient->win))
-		return (ft_xclient_free(xclient), NULL);
-	xclient->ximage = ft_ximage_init(xclient);
-	if (!(xclient->ximage.img))
+	xclient->win = mlx_new_window(xclient->mlx, __WIDTH, __HEIGHT, __TITLE);
+	if (!xclient->win)
 		return (ft_xclient_free(xclient), NULL);
 	return (xclient);
 }
