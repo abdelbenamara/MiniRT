@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_color_init.c                                    :+:      :+:    :+:   */
+/*   ft_color_value.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 22:11:12 by abenamar          #+#    #+#             */
-/*   Updated: 2024/01/20 15:09:28 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/01/21 20:20:21 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-int	ft_color_init(const char *str)
+int	ft_color_value(const char *str)
 {
 	char	*s1;
 	char	*s2;
