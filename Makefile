@@ -6,7 +6,7 @@
 #    By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/28 18:35:02 by abenamar          #+#    #+#              #
-#    Updated: 2024/01/20 18:05:50 by abenamar         ###   ########.fr        #
+#    Updated: 2024/01/21 21:05:42 by abenamar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,7 +49,8 @@ SRCS += ft_tab_size.c
 
 SRCS += ft_atof.c
 
-SRCS += ft_vec3_init.c
+SRCS += ft_vec3_new.c
+SRCS += ft_perspective_projection.c
 
 # **************************************************************************** #
 #                                                                              #
@@ -57,10 +58,8 @@ SRCS += ft_vec3_init.c
 #                                                                              #
 # **************************************************************************** #
 
-SRCS += ft_color_init.c
+SRCS += ft_color_value.c
 
-SRCS += ft_ambiance_init.c
-SRCS += ft_camera_init.c
 SRCS += ft_light_add.c
 SRCS += ft_shape_add.c
 
@@ -73,15 +72,13 @@ SRCS += ft_scene_new.c
 #                                                                              #
 # **************************************************************************** #
 
-SRCS += ft_xsettings_reset.c
-SRCS += ft_ximage_init.c
 SRCS += ft_xclient_free.c
 SRCS += ft_xclient_new.c
 
+SRCS += ft_key_press.c
+
 SRCS += ft_pixel_put.c
 SRCS += ft_frame_render.c
-
-SRCS += ft_key_press_handle.c
 
 SRCS += miniRT.c
 
