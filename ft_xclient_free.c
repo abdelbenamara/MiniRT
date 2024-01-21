@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 18:21:34 by abenamar          #+#    #+#             */
-/*   Updated: 2023/12/30 22:58:25 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/01/21 19:07:45 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,7 @@
 
 void	ft_xclient_free(t_xclient *xclient)
 {
-	ft_scene_free(xclient->xsettings.scene);
-	if (xclient->ximage.img)
-		mlx_destroy_image(xclient->mlx, xclient->ximage.img);
+	ft_scene_free(xclient->scene);
 	if (xclient->win)
 		mlx_destroy_window(xclient->mlx, xclient->win);
 	if (xclient->mlx)
