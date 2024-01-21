@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 12:48:21 by abenamar          #+#    #+#             */
-/*   Updated: 2024/01/20 17:13:21 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/01/21 20:19:57 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ uint8_t	ft_light_add(t_scene *scene, char **info)
 	new = ft_lstnew(light);
 	if (!light || !new)
 		return (ft_pstderr(__ERR_2), free(light), free(new), 0);
-	u = ft_vec3_init(info[1]);
+	u = ft_vec3_new(info[1]);
 	if (!u)
 		return (ft_lstdelone(new, free), 0);
 	light->position = *u;
@@ -34,7 +34,7 @@ uint8_t	ft_light_add(t_scene *scene, char **info)
 		return (ft_pstderr(__ERR_5), ft_lstdelone(new, free), 0);
 	if (light->bratio < 0.0 || light->bratio > 1.0)
 		return (ft_pstderr(__ERR_6), ft_lstdelone(new, free), 0);
-	light->color = ft_color_init(info[3]);
+	light->color = ft_color_value(info[3]);
 	if (light->color == -1)
 		return (ft_lstdelone(new, free), 0);
 	ft_lstadd_front(&scene->lights, new);
