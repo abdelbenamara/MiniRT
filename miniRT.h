@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 18:08:16 by abenamar          #+#    #+#             */
-/*   Updated: 2024/01/20 18:04:40 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/01/21 20:53:14 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,8 @@ typedef struct s_vec3
 
 double		ft_atof(const char *nptr);
 
-t_vec3		*ft_vec3_init(const char *str);
+t_vec3		*ft_vec3_new(const char *str);
+t_vec2		ft_perspective_projection(t_vec3 a, t_vec3 c, t_vec3 t);
 
 /* ************************************************************************** */
 /*                                                                            */
@@ -133,10 +134,8 @@ typedef struct s_scene
 	t_list		*cylinders;
 }	t_scene;
 
-int			ft_color_init(const char *str);
+int			ft_color_value(const char *str);
 
-uint8_t		ft_ambiance_init(t_scene *scene, char **info);
-uint8_t		ft_camera_init(t_scene *scene, char **info);
 uint8_t		ft_light_add(t_scene *scene, char **info);
 uint8_t		ft_shape_add(t_scene *scene, char **info);
 
@@ -149,24 +148,17 @@ t_scene		*ft_scene_new(char *file);
 /*                                                                            */
 /* ************************************************************************** */
 
-# ifndef WIDTH
-#  define WIDTH		1280
+# ifndef __WIDTH
+#  define __WIDTH	1280
 # endif
 
-# ifndef HEIGHT
-#  define HEIGHT	720
+# ifndef __HEIGHT
+#  define __HEIGHT	720
 # endif
 
-# ifndef TITLE
-#  define TITLE		"MiniRT"
+# ifndef __TITLE
+#  define __TITLE	"MiniRT"
 # endif
-
-typedef struct s_xsettings
-{
-	t_scene	*scene;
-	t_vec2	origin;
-	t_vec3	theta;
-}	t_xsettings;
 
 typedef struct s_ximage
 {
@@ -176,25 +168,22 @@ typedef struct s_ximage
 	int			bpp;
 	int			lsize;
 	int			endian;
-	t_xsettings	xsettings;
+	t_scene		*scene;
 }	t_ximage;
 
 typedef struct s_xclient
 {
-	t_xsettings	xsettings;
 	void		*mlx;
 	void		*win;
-	t_ximage	ximage;
+	t_scene		*scene;
 }	t_xclient;
 
-void		ft_xsettings_reset(t_xsettings *xsettings);
-t_ximage	ft_ximage_init(t_xclient *xclient);
 void		ft_xclient_free(t_xclient *xclient);
 t_xclient	*ft_xclient_new(t_scene *scene);
 
+int			ft_key_press(int keycode, t_xclient *xclient);
+
 void		ft_pixel_put(t_ximage ximage, int x, int y, int color);
 int			ft_frame_render(t_xclient *xclient);
-
-int			ft_key_press_handle(int keycode, t_xclient *xclient);
 
 #endif
