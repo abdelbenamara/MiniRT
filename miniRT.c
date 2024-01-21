@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 18:09:55 by abenamar          #+#    #+#             */
-/*   Updated: 2024/01/20 15:27:36 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/01/21 20:44:23 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,11 @@ int	main(int ac, char **av)
 	xclient = ft_xclient_new(scene);
 	if (!xclient)
 		return (1);
-	mlx_hook(xclient->win, \
-		DestroyNotify, ButtonReleaseMask, mlx_loop_end, xclient->mlx);
-	mlx_hook(xclient->win, \
-		KeyPress, KeyPressMask, ft_key_press_handle, xclient);
+	mlx_hook(xclient->win, DestroyNotify, ButtonReleaseMask, \
+		mlx_loop_end, xclient->mlx);
+	mlx_hook(xclient->win, KeyPress, KeyPressMask, \
+		ft_key_press, xclient);
 	mlx_loop_hook(xclient->mlx, ft_frame_render, xclient);
 	mlx_loop(xclient->mlx);
-	return (ft_xclient_free(xclient), 0);
+	return (ft_xclient_free(xclient), EXIT_SUCCESS);
 }
