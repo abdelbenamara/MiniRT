@@ -6,13 +6,62 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 11:00:24 by abenamar          #+#    #+#             */
-/*   Updated: 2024/01/20 18:05:05 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/01/21 20:21:18 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-uint8_t	ft_info_parse(char **info, t_scene *scene)
+static uint8_t	ft_ambiance_init(t_scene *scene, char **info)
+{
+	if (scene->ambiance)
+		return (ft_pstderr(__ERR_3), 0);
+	if (ft_tab_size(info) != 3)
+		return (ft_pstderr(__ERR_4), 0);
+	scene->ambiance = malloc(sizeof(t_ambiance));
+	if (!scene->ambiance)
+		return (ft_pstderr(__ERR_2), 0);
+	scene->ambiance->lratio = ft_atof(info[1]);
+	if (isnan(scene->ambiance->lratio))
+		return (ft_pstderr(__ERR_5), 0);
+	if (scene->ambiance->lratio < 0.0 || scene->ambiance->lratio > 1.0)
+		return (ft_pstderr(__ERR_6), 0);
+	scene->ambiance->color = ft_color_value(info[2]);
+	if (scene->ambiance->color == -1)
+		return (0);
+	return (1);
+}
+
+static uint8_t	ft_camera_init(t_scene *scene, char **info)
+{
+	t_vec3	*u;
+
+	if (scene->camera)
+		return (ft_pstderr(__ERR_3), 0);
+	if (ft_tab_size(info) != 4)
+		return (ft_pstderr(__ERR_4), 0);
+	scene->camera = malloc(sizeof(t_camera));
+	if (!scene->camera)
+		return (ft_pstderr(__ERR_2), 0);
+	u = ft_vec3_new(info[1]);
+	if (!u)
+		return (0);
+	scene->camera->position = *u;
+	(free(u), u = ft_vec3_new(info[2]));
+	if (!u)
+		return (0);
+	scene->camera->orientation = *u;
+	if (u->x < -1.0 || u->y < -1.0 || u->z < -1.0
+		|| u->x > 1.0 || u->y > 1.0 || u->z > 1.0)
+		return (ft_pstderr(__ERR_10), free(u), 0);
+	free(u);
+	scene->camera->fov = ft_atoi(info[3]);
+	if (scene->camera->fov < 0 || scene->camera->fov > 180)
+		return (ft_pstderr(__ERR_11), 0);
+	return (1);
+}
+
+static uint8_t	ft_info_read(char **info, t_scene *scene)
 {
 	if (!info)
 		return (0);
@@ -27,7 +76,7 @@ uint8_t	ft_info_parse(char **info, t_scene *scene)
 	return (ft_shape_add(scene, info));
 }
 
-uint8_t	ft_scene_init(t_scene *scene, const int fd)
+static uint8_t	ft_scene_init(t_scene *scene, const int fd)
 {
 	char	*line;
 	char	**info;
@@ -37,7 +86,7 @@ uint8_t	ft_scene_init(t_scene *scene, const int fd)
 	{
 		line[ft_strlen(line) - 1] = '\0';
 		info = ft_split(line, ' ');
-		if (!ft_info_parse(info, scene))
+		if (!ft_info_read(info, scene))
 		{
 			while (line)
 				(free(line), line = get_next_line(fd));
@@ -54,13 +103,10 @@ uint8_t	ft_scene_init(t_scene *scene, const int fd)
 
 t_scene	*ft_scene_new(char *file)
 {
-	int		fd;
 	t_scene	*scene;
-	uint8_t	init;
+	int		fd;
+	uint8_t	ready;
 
-	fd = open(file, O_RDONLY);
-	if (fd == -1)
-		return (ft_perror(file), NULL);
 	scene = malloc(sizeof(t_scene));
 	if (!scene)
 		return (ft_pstderr(__ERR_2), NULL);
@@ -70,10 +116,13 @@ t_scene	*ft_scene_new(char *file)
 	scene->spheres = NULL;
 	scene->planes = NULL;
 	scene->cylinders = NULL;
-	init = ft_scene_init(scene, fd);
+	fd = open(file, O_RDONLY);
+	if (fd == -1)
+		return (ft_perror(file), ft_scene_free(scene), NULL);
+	ready = ft_scene_init(scene, fd);
 	if (close(fd) == -1)
 		return (ft_perror(file), ft_scene_free(scene), NULL);
-	if (!init)
+	if (!ready)
 		return (ft_scene_free(scene), NULL);
 	return (scene);
 }
