@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 19:29:05 by abenamar          #+#    #+#             */
-/*   Updated: 2024/01/03 12:38:19 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/02/20 23:53:01 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 static uint8_t	ft_isdouble(const char *nptr)
 {
+	while (*nptr == ' ' || (9 <= *nptr && *nptr <= 13))
+		++nptr;
 	if (*nptr == '+' || *nptr == '-')
 		++nptr;
 	if (!ft_isdigit(*nptr))
@@ -64,6 +66,7 @@ double	ft_atof(const char *nptr)
 	if (!s)
 		return (d);
 	i = ft_atoi(s + 1);
-	d += i / pow(10.0, ft_intlen(i));
-	return (d);
+	while (*nptr == ' ' || (9 <= *nptr && *nptr <= 13))
+		++nptr;
+	return (d + (1.0 - 2.0 * (*nptr == '-')) * i / pow(10.0, ft_intlen(i)));
 }
