@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 11:00:24 by abenamar          #+#    #+#             */
-/*   Updated: 2024/01/21 20:21:18 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/02/20 23:28:44 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ static uint8_t	ft_ambiance_init(t_scene *scene, char **info)
 		return (ft_pstderr(__ERR_5), 0);
 	if (scene->ambiance->lratio < 0.0 || scene->ambiance->lratio > 1.0)
 		return (ft_pstderr(__ERR_6), 0);
-	scene->ambiance->color = ft_color_value(info[2]);
-	if (scene->ambiance->color == -1)
+	scene->ambiance->color = ft_color_read(info[2]);
+	if (isnan(scene->ambiance->color.x))
 		return (0);
 	return (1);
 }
@@ -76,7 +76,7 @@ static uint8_t	ft_info_read(char **info, t_scene *scene)
 	return (ft_shape_add(scene, info));
 }
 
-static uint8_t	ft_scene_init(t_scene *scene, const int fd)
+static uint8_t	ft_scene_setup(t_scene *scene, const int fd)
 {
 	char	*line;
 	char	**info;
@@ -119,7 +119,7 @@ t_scene	*ft_scene_new(char *file)
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
 		return (ft_perror(file), ft_scene_free(scene), NULL);
-	ready = ft_scene_init(scene, fd);
+	ready = ft_scene_setup(scene, fd);
 	if (close(fd) == -1)
 		return (ft_perror(file), ft_scene_free(scene), NULL);
 	if (!ready)
