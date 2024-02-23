@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 22:08:10 by abenamar          #+#    #+#             */
-/*   Updated: 2024/01/21 20:19:57 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/02/20 23:53:42 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ static uint8_t	ft_sphere_add(t_scene *scene, char **info)
 		return (ft_pstderr(__ERR_5), ft_lstdelone(new, free), 0);
 	if (sphere->diameter < 0.0)
 		return (ft_pstderr(__ERR_13), ft_lstdelone(new, free), 0);
-	sphere->color = ft_color_value(info[3]);
-	if (sphere->color == -1)
+	sphere->color = ft_color_read(info[3]);
+	if (isnan(sphere->color.x))
 		return (ft_lstdelone(new, free), 0);
 	ft_lstadd_front(&scene->spheres, new);
 	return (1);
@@ -64,8 +64,8 @@ static uint8_t	ft_plane_add(t_scene *scene, char **info)
 	if (u->x < -1.0 || u->y < -1.0 || u->z < -1.0
 		|| u->x > 1.0 || u->y > 1.0 || u->z > 1.0)
 		return (ft_pstderr(__ERR_10), free(u), ft_lstdelone(new, free), 0);
-	(free(u), plane->color = ft_color_value(info[3]));
-	if (plane->color == -1)
+	(free(u), plane->color = ft_color_read(info[3]));
+	if (isnan(plane->color.x))
 		return (ft_lstdelone(new, free), 0);
 	return (ft_lstadd_front(&scene->planes, new), 1);
 }
@@ -93,8 +93,8 @@ static uint8_t	ft_cylinder_add(t_scene *scene, char **info)
 	if (u->x < -1.0 || u->y < -1.0 || u->z < -1.0
 		|| u->x > 1.0 || u->y > 1.0 || u->z > 1.0)
 		return (ft_pstderr(__ERR_10), free(u), ft_lstdelone(new, free), 0);
-	(free(u), cylinder->color = ft_color_value(info[5]));
-	if (cylinder->color == -1)
+	(free(u), cylinder->color = ft_color_read(info[5]));
+	if (isnan(cylinder->color.x))
 		return (ft_lstdelone(new, free), 0);
 	return (ft_lstadd_front(&scene->cylinders, new), 1);
 }
