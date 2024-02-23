@@ -6,7 +6,7 @@
 #    By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/28 18:35:02 by abenamar          #+#    #+#              #
-#    Updated: 2024/01/21 21:05:42 by abenamar         ###   ########.fr        #
+#    Updated: 2024/02/23 20:37:19 by abenamar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,7 +50,19 @@ SRCS += ft_tab_size.c
 SRCS += ft_atof.c
 
 SRCS += ft_vec3_new.c
-SRCS += ft_perspective_projection.c
+SRCS += ft_vec3.c
+SRCS += ft_vec3_sum.c
+SRCS += ft_vec3_diff.c
+SRCS += ft_vec3_prod.c
+SRCS += ft_vec3_length_squared.c
+SRCS += ft_vec3_length.c
+SRCS += ft_vec3_unit.c
+SRCS += ft_vec3_dot.c
+SRCS += ft_vec3_cross.c
+
+SRCS += ft_ray.c
+
+SRCS += ft_interval.c
 
 # **************************************************************************** #
 #                                                                              #
@@ -58,13 +70,17 @@ SRCS += ft_perspective_projection.c
 #                                                                              #
 # **************************************************************************** #
 
-SRCS += ft_color_value.c
+SRCS += ft_color_read.c
+SRCS += ft_color_build.c
 
 SRCS += ft_light_add.c
 SRCS += ft_shape_add.c
 
 SRCS += ft_scene_free.c
 SRCS += ft_scene_new.c
+SRCS += ft_scene_hit.c
+
+SRCS += ft_viewport.c
 
 # **************************************************************************** #
 #                                                                              #
@@ -74,11 +90,12 @@ SRCS += ft_scene_new.c
 
 SRCS += ft_xclient_free.c
 SRCS += ft_xclient_new.c
-
-SRCS += ft_key_press.c
+SRCS += ft_xclient_buffer.c
+SRCS += ft_xclient_flush.c
 
 SRCS += ft_pixel_put.c
-SRCS += ft_frame_render.c
+SRCS += ft_ray_tracing.c
+SRCS += ft_key_press.c
 
 SRCS += miniRT.c
 
