@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 18:08:16 by abenamar          #+#    #+#             */
-/*   Updated: 2024/01/21 20:53:14 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/02/23 00:15:57 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,6 @@ size_t		ft_tab_size(char **tab);
 #  define M_PI	3.14159265358979323846	/* pi */
 # endif
 
-typedef struct s_vec2
-{
-	int	x;
-	int	y;
-}	t_vec2;
-
 typedef struct s_vec3
 {
 	double	x;
@@ -70,10 +64,45 @@ typedef struct s_vec3
 	double	z;
 }	t_vec3;
 
+typedef t_vec3	t_point3;
+
+typedef struct s_ray
+{
+	t_point3	origin;
+	t_vec3		direction;
+}	t_ray;
+
+typedef struct s_interval
+{
+	double	min;
+	double	max;
+}	t_interval;
+
+typedef t_vec3	t_color;
+
+typedef struct s_hit
+{
+	double		t;
+	t_point3	point;
+	t_color		color;
+}	t_hit;
+
 double		ft_atof(const char *nptr);
 
 t_vec3		*ft_vec3_new(const char *str);
-t_vec2		ft_perspective_projection(t_vec3 a, t_vec3 c, t_vec3 t);
+t_vec3		ft_vec3(double x, double y, double z);
+t_vec3		ft_vec3_sum(t_vec3 u, t_vec3 v);
+t_vec3		ft_vec3_diff(t_vec3 u, t_vec3 v);
+t_vec3		ft_vec3_prod(t_vec3 u, double t);
+double		ft_vec3_length_squared(t_vec3 u);
+double		ft_vec3_length(t_vec3 u);
+t_vec3		ft_vec3_unit(t_vec3 u);
+double		ft_vec3_dot(t_vec3 u, t_vec3 v);
+t_vec3		ft_vec3_cross(t_vec3 u, t_vec3 v);
+
+t_ray		ft_ray(t_point3 origin, t_vec3 direction);
+
+t_interval	ft_interval(double min, double max);
 
 /* ************************************************************************** */
 /*                                                                            */
@@ -84,44 +113,44 @@ t_vec2		ft_perspective_projection(t_vec3 a, t_vec3 c, t_vec3 t);
 typedef struct s_ambiance
 {
 	double	lratio;
-	int		color;
+	t_vec3	color;
 }	t_ambiance;
 
 typedef struct s_camera
 {
-	t_vec3	position;
-	t_vec3	orientation;
-	int		fov;
+	t_point3	position;
+	t_vec3		orientation;
+	int			fov;
 }	t_camera;
 
 typedef struct s_light
 {
-	t_vec3	position;
-	double	bratio;
-	int		color;
+	t_point3	position;
+	double		bratio;
+	t_color		color;
 }	t_light;
 
 typedef struct s_sphere
 {
-	t_vec3	center;
-	double	diameter;
-	int		color;
+	t_point3	center;
+	double		diameter;
+	t_color		color;
 }	t_sphere;
 
 typedef struct s_plane
 {
-	t_vec3	point;
-	t_vec3	orientation;
-	int		color;
+	t_point3	point;
+	t_vec3		orientation;
+	t_color		color;
 }	t_plane;
 
 typedef struct s_cylinder
 {
-	t_vec3	center;
-	t_vec3	orientation;
-	double	diameter;
-	double	height;
-	int		color;
+	t_point3	center;
+	t_vec3		orientation;
+	double		diameter;
+	double		height;
+	t_color		color;
 }	t_cylinder;
 
 typedef struct s_scene
@@ -134,13 +163,26 @@ typedef struct s_scene
 	t_list		*cylinders;
 }	t_scene;
 
-int			ft_color_value(const char *str);
+typedef struct s_viewport
+{
+	t_vec3		u;
+	t_vec3		v;
+	t_vec3		pdu;
+	t_vec3		pdv;
+	t_point3	p00;
+}	t_viewport;
+
+t_color		ft_color_read(const char *str);
+int			ft_color_build(t_color color, int spp);
 
 uint8_t		ft_light_add(t_scene *scene, char **info);
 uint8_t		ft_shape_add(t_scene *scene, char **info);
 
 void		ft_scene_free(t_scene *scene);
 t_scene		*ft_scene_new(char *file);
+t_color		ft_scene_hit(t_scene *scene, t_ray r, t_interval i);
+
+t_viewport	ft_viewport(t_camera *camera);
 
 /* ************************************************************************** */
 /*                                                                            */
@@ -148,42 +190,43 @@ t_scene		*ft_scene_new(char *file);
 /*                                                                            */
 /* ************************************************************************** */
 
-# ifndef __WIDTH
-#  define __WIDTH	1280
+# ifndef _WIDTH
+#  define _WIDTH	1280
 # endif
 
-# ifndef __HEIGHT
-#  define __HEIGHT	720
+# ifndef _HEIGHT
+#  define _HEIGHT	720
 # endif
 
-# ifndef __TITLE
-#  define __TITLE	"MiniRT"
+# ifndef _TITLE
+#  define _TITLE	"MiniRT"
 # endif
 
-typedef struct s_ximage
-{
-	void		*mlx;
-	void		*img;
-	char		*data;
-	int			bpp;
-	int			lsize;
-	int			endian;
-	t_scene		*scene;
-}	t_ximage;
+# ifndef _SPP
+#  define _SPP		0
+# endif
 
 typedef struct s_xclient
 {
 	void		*mlx;
 	void		*win;
+	void		*img;
+	void		*buf;
+	char		*data;
+	int			bpp;
+	int			lsize;
+	int			endian;
+	uint8_t		update;
 	t_scene		*scene;
 }	t_xclient;
 
 void		ft_xclient_free(t_xclient *xclient);
 t_xclient	*ft_xclient_new(t_scene *scene);
+void		ft_xclient_buffer(t_xclient *xclient);
+void		ft_xclient_flush(t_xclient *xclient);
 
+void		ft_pixel_put(t_xclient *xclient, int x, int y, int color);
+void		ft_ray_tracing(t_xclient *xclient);
 int			ft_key_press(int keycode, t_xclient *xclient);
-
-void		ft_pixel_put(t_ximage ximage, int x, int y, int color);
-int			ft_frame_render(t_xclient *xclient);
 
 #endif
