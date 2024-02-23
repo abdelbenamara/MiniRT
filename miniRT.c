@@ -6,11 +6,22 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 18:09:55 by abenamar          #+#    #+#             */
-/*   Updated: 2024/01/21 20:44:23 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/02/07 23:52:01 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
+
+static int	ft_frame_render(t_xclient *xclient)
+{
+	if (xclient->update)
+	{
+		mlx_clear_window(xclient->mlx, xclient->win);
+		mlx_put_image_to_window(xclient->mlx, xclient->win, xclient->img, 0, 0);
+		xclient->update = 0;
+	}
+	return (0);
+}
 
 int	main(int ac, char **av)
 {
@@ -29,6 +40,7 @@ int	main(int ac, char **av)
 	xclient = ft_xclient_new(scene);
 	if (!xclient)
 		return (1);
+	ft_ray_tracing(xclient);
 	mlx_hook(xclient->win, DestroyNotify, ButtonReleaseMask, \
 		mlx_loop_end, xclient->mlx);
 	mlx_hook(xclient->win, KeyPress, KeyPressMask, \
