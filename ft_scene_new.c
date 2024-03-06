@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 11:00:24 by abenamar          #+#    #+#             */
-/*   Updated: 2024/02/20 23:28:44 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/02/29 00:20:13 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static uint8_t	ft_camera_init(t_scene *scene, char **info)
 	if (u->x < -1.0 || u->y < -1.0 || u->z < -1.0
 		|| u->x > 1.0 || u->y > 1.0 || u->z > 1.0)
 		return (ft_pstderr(__ERR_10), free(u), 0);
-	free(u);
+	(free(u), scene->camera->theta = ft_vec3(0.0, 0.0, 0.0));
 	scene->camera->fov = ft_atoi(info[3]);
 	if (scene->camera->fov < 0 || scene->camera->fov > 180)
 		return (ft_pstderr(__ERR_11), 0);
