@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 22:08:10 by abenamar          #+#    #+#             */
-/*   Updated: 2024/02/20 23:53:42 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/03/05 21:45:33 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,17 +105,19 @@ uint8_t	ft_shape_add(t_scene *scene, char **info)
 		ft_sphere_add, ft_plane_add, ft_cylinder_add
 	};
 	const int		n = !ft_strncmp(info[0], "sp", 3) \
-						+ 2 * !ft_strncmp(info[0], "pl", 3) \
-						+ 3 * !ft_strncmp(info[0], "cy", 3);
+		+ 2 * !ft_strncmp(info[0], "pl", 3) + 3 * !ft_strncmp(info[0], "cy", 3);
 	t_cylinder		*cylinder;
 
 	if (!n)
 		return (ft_pstderr(__ERR_12), 0);
 	if (!ft_item_add[n - 1](scene, info))
 		return (0);
-	if (n == 3)
+	if (n == 2)
+		((t_plane *) scene->planes->content)->theta = ft_vec3(0.0, 0.0, 0.0);
+	else if (n == 3)
 	{
 		cylinder = scene->cylinders->content;
+		cylinder->theta = ft_vec3(0.0, 0.0, 0.0);
 		cylinder->diameter = ft_atof(info[3]);
 		cylinder->height = ft_atof(info[4]);
 		if (isnan(cylinder->diameter) || isnan(cylinder->height))
