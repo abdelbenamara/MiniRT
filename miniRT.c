@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 18:09:55 by abenamar          #+#    #+#             */
-/*   Updated: 2024/02/07 23:52:01 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/02/29 01:16:27 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ static int	ft_frame_render(t_xclient *xclient)
 {
 	if (xclient->update)
 	{
+		ft_ray_tracing(xclient);
 		mlx_clear_window(xclient->mlx, xclient->win);
 		mlx_put_image_to_window(xclient->mlx, xclient->win, xclient->img, 0, 0);
 		xclient->update = 0;
@@ -40,7 +41,6 @@ int	main(int ac, char **av)
 	xclient = ft_xclient_new(scene);
 	if (!xclient)
 		return (1);
-	ft_ray_tracing(xclient);
 	mlx_hook(xclient->win, DestroyNotify, ButtonReleaseMask, \
 		mlx_loop_end, xclient->mlx);
 	mlx_hook(xclient->win, KeyPress, KeyPressMask, \
