@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 18:08:16 by abenamar          #+#    #+#             */
-/*   Updated: 2024/02/23 00:15:57 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/02/29 01:34:04 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,7 @@ typedef struct s_camera
 {
 	t_point3	position;
 	t_vec3		orientation;
+	t_vec3		theta;
 	int			fov;
 }	t_camera;
 
@@ -141,6 +142,7 @@ typedef struct s_plane
 {
 	t_point3	point;
 	t_vec3		orientation;
+	t_vec3		theta;
 	t_color		color;
 }	t_plane;
 
@@ -148,6 +150,7 @@ typedef struct s_cylinder
 {
 	t_point3	center;
 	t_vec3		orientation;
+	t_vec3		theta;
 	double		diameter;
 	double		height;
 	t_color		color;
@@ -191,11 +194,11 @@ t_viewport	ft_viewport(t_camera *camera);
 /* ************************************************************************** */
 
 # ifndef _WIDTH
-#  define _WIDTH	1280
+#  define _WIDTH	320
 # endif
 
 # ifndef _HEIGHT
-#  define _HEIGHT	720
+#  define _HEIGHT	180
 # endif
 
 # ifndef _TITLE
