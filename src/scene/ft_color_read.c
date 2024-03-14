@@ -6,30 +6,29 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 22:11:12 by abenamar          #+#    #+#             */
-/*   Updated: 2024/02/08 23:42:19 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/03/14 15:55:20 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-t_vec3	ft_color_read(const char *str)
+t_color	ft_color_read(const char *str)
 {
-	char	*s1;
-	char	*s2;
-	int		r;
-	int		g;
-	int		b;
+	const t_color	err = ft_vec3(nanf(""), nanf(""), nanf(""));
+	char			*comma[2];
+	t_color			rgb;
 
-	s1 = ft_strchr(str, ',');
-	s2 = NULL;
-	if (s1)
-		s2 = ft_strchr(s1 + 1, ',');
-	if (!s2 || ft_strchr(s2 + 1, ','))
-		return (ft_pstderr(__ERR_7), ft_vec3(nan(""), nan(""), nan("")));
-	r = ft_atoi(str);
-	g = ft_atoi(s1 + 1);
-	b = ft_atoi(s2 + 1);
-	if (r < 0 || g < 0 || b < 0 || r > 255 || g > 255 || b > 255)
-		return (ft_pstderr(__ERR_8), ft_vec3(nan(""), nan(""), nan("")));
-	return (ft_vec3((1.0 * r) / 255.0, (1.0 * g) / 255.0, (1.0 * b) / 255.0));
+	comma[0] = ft_strchr(str, ',');
+	comma[1] = NULL;
+	if (comma[0])
+		comma[1] = ft_strchr(comma[0] + 1, ',');
+	if (!comma[1] || ft_strchr(comma[1] + 1, ','))
+		return (ft_pstderr(__ERR_7), err);
+	rgb.x = ft_atoi(str);
+	rgb.y = ft_atoi(comma[0] + 1);
+	rgb.z = ft_atoi(comma[1] + 1);
+	if (rgb.x < 0.0F || rgb.y < 0.0F || rgb.z < 0.0F
+		|| rgb.x > 255.0F || rgb.y > 255.0F || rgb.z > 255.0F)
+		return (ft_pstderr(__ERR_8), err);
+	return (ft_vec3_prod(rgb, 1.0F / 255.0F));
 }
