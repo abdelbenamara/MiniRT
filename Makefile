@@ -6,7 +6,7 @@
 #    By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/28 18:35:02 by abenamar          #+#    #+#              #
-#    Updated: 2024/02/23 20:37:19 by abenamar         ###   ########.fr        #
+#    Updated: 2024/03/14 16:57:16 by abenamar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,11 +35,13 @@ LDLIBS += -lm
 #                                                                              #
 # **************************************************************************** #
 
-SRCS := ft_pstderr.c
-SRCS += ft_perror.c
+SRC_UTILS := src/utils
 
-SRCS += ft_tab_free.c
-SRCS += ft_tab_size.c
+SRCS := $(SRC_UTILS)/ft_pstderr.c
+SRCS += $(SRC_UTILS)/ft_perror.c
+
+SRCS += $(SRC_UTILS)/ft_tab_free.c
+SRCS += $(SRC_UTILS)/ft_tab_size.c
 
 # **************************************************************************** #
 #                                                                              #
@@ -47,22 +49,19 @@ SRCS += ft_tab_size.c
 #                                                                              #
 # **************************************************************************** #
 
-SRCS += ft_atof.c
+SRC_MATH := src/math
 
-SRCS += ft_vec3_new.c
-SRCS += ft_vec3.c
-SRCS += ft_vec3_sum.c
-SRCS += ft_vec3_diff.c
-SRCS += ft_vec3_prod.c
-SRCS += ft_vec3_length_squared.c
-SRCS += ft_vec3_length.c
-SRCS += ft_vec3_unit.c
-SRCS += ft_vec3_dot.c
-SRCS += ft_vec3_cross.c
+SRCS += $(SRC_MATH)/ft_atof.c
 
-SRCS += ft_ray.c
-
-SRCS += ft_interval.c
+SRCS += $(SRC_MATH)/ft_vec3.c
+SRCS += $(SRC_MATH)/ft_vec3_sum.c
+SRCS += $(SRC_MATH)/ft_vec3_diff.c
+SRCS += $(SRC_MATH)/ft_vec3_prod.c
+SRCS += $(SRC_MATH)/ft_vec3_len.c
+SRCS += $(SRC_MATH)/ft_vec3_unit.c
+SRCS += $(SRC_MATH)/ft_vec3_dot.c
+SRCS += $(SRC_MATH)/ft_vec3_cross.c
+SRCS += $(SRC_MATH)/ft_vec3_rotate.c
 
 # **************************************************************************** #
 #                                                                              #
@@ -70,17 +69,20 @@ SRCS += ft_interval.c
 #                                                                              #
 # **************************************************************************** #
 
-SRCS += ft_color_read.c
-SRCS += ft_color_build.c
+SRC_SCENE := src/scene
 
-SRCS += ft_light_add.c
-SRCS += ft_shape_add.c
+SRCS += $(SRC_SCENE)/ft_color_read.c
+SRCS += $(SRC_SCENE)/ft_vec3_read.c
+SRCS += $(SRC_SCENE)/ft_vec3_is_normalized.c
 
-SRCS += ft_scene_free.c
-SRCS += ft_scene_new.c
-SRCS += ft_scene_hit.c
-
-SRCS += ft_viewport.c
+SRCS += $(SRC_SCENE)/ft_ambiance_init.c
+SRCS += $(SRC_SCENE)/ft_camera_init.c
+SRCS += $(SRC_SCENE)/ft_light_add.c
+SRCS += $(SRC_SCENE)/ft_sphere_add.c
+SRCS += $(SRC_SCENE)/ft_plane_add.c
+SRCS += $(SRC_SCENE)/ft_cylinder_add.c
+SRCS += $(SRC_SCENE)/ft_scene_free.c
+SRCS += $(SRC_SCENE)/ft_scene_new.c
 
 # **************************************************************************** #
 #                                                                              #
@@ -88,20 +90,28 @@ SRCS += ft_viewport.c
 #                                                                              #
 # **************************************************************************** #
 
-SRCS += ft_xclient_free.c
-SRCS += ft_xclient_new.c
-SRCS += ft_xclient_buffer.c
-SRCS += ft_xclient_flush.c
+SRC_RENDER := src/render
 
-SRCS += ft_pixel_put.c
-SRCS += ft_ray_tracing.c
-SRCS += ft_key_press.c
+SRCS += $(SRC_RENDER)/ft_xclient_free.c
+SRCS += $(SRC_RENDER)/ft_xclient_new.c
+SRCS += $(SRC_RENDER)/ft_xclient_buffer.c
+SRCS += $(SRC_RENDER)/ft_xclient_flush.c
+
+SRCS += $(SRC_RENDER)/ft_viewport.c
+SRCS += $(SRC_RENDER)/ft_ray.c
+SRCS += $(SRC_RENDER)/ft_cylinder_hit.c
+SRCS += $(SRC_RENDER)/ft_scene_hit.c
+
+SRCS += $(SRC_RENDER)/ft_pixel_color.c
+SRCS += $(SRC_RENDER)/ft_pixel_put.c
+SRCS += $(SRC_RENDER)/ft_ray_tracing.c
+SRCS += $(SRC_RENDER)/ft_key_press.c
+
+# **************************************************************************** #
 
 SRCS += miniRT.c
 
 OBJS := $(SRCS:.c=.o)
-
-BOBJS := $(BSRCS:.c=.o)
 
 CC := cc
 
