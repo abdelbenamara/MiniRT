@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 23:33:55 by abenamar          #+#    #+#             */
-/*   Updated: 2024/02/22 23:06:42 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/03/13 11:46:34 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,5 @@
 
 t_vec3	ft_vec3_unit(t_vec3 u)
 {
-	return (ft_vec3_prod(u, 1.0 / sqrt(ft_vec3_length_squared(u))));
+	return (ft_vec3_prod(u, 1.0F / ft_vec3_len(u)));
 }
