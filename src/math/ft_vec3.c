@@ -6,13 +6,13 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 23:31:39 by abenamar          #+#    #+#             */
-/*   Updated: 2024/02/08 23:42:19 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/03/13 11:43:47 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-t_vec3	ft_vec3(double x, double y, double z)
+t_vec3	ft_vec3(float x, float y, float z)
 {
 	t_vec3	u;
 
