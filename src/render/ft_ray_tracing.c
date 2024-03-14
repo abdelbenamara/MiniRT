@@ -6,31 +6,29 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 00:23:38 by abenamar          #+#    #+#             */
-/*   Updated: 2024/02/23 20:52:10 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/03/14 15:13:38 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-static int	ft_color_sample(t_scene *scene, t_viewport vp, t_point3 p)
+static int	ft_super_sampling(t_scene *scene, t_viewport vp, t_point3 p)
 {
-	const t_point3	cp = scene->camera->position;
-	int				k;
-	t_color			color;
+	const t_point3		cp = scene->camera->position;
+	int					k;
+	t_color				color;
 
 	k = 0;
-	color = ft_scene_hit(scene, ft_ray(cp, ft_vec3_diff(p, cp)), \
-		ft_interval(0.001, INFINITY));
-	while (k < _SPP)
+	color = ft_scene_hit(scene, ft_ray(cp, ft_vec3_unit(ft_vec3_diff(p, cp))));
+	while (k < _SAMPLES_PER_PIXEL)
 	{
-		color = ft_vec3_sum(color, ft_scene_hit(scene, ft_ray(cp, \
-			ft_vec3_diff(ft_vec3_sum(p, ft_vec3_sum(\
-				ft_vec3_prod(vp.pdu, -0.5 * rand() / (RAND_MAX + 1.0)), \
-					ft_vec3_prod(vp.pdv, -0.5 * rand() / (RAND_MAX + 1.0)))), \
-						cp)), ft_interval(0.001, INFINITY)));
+		color = ft_vec3_sum(color, ft_scene_hit(scene, \
+			ft_ray(cp, ft_vec3_unit(ft_vec3_diff(ft_vec3_sum(p, ft_vec3_sum(\
+			ft_vec3_prod(vp.pdu, -0.5F * rand() / (RAND_MAX + 1.0F)), \
+			ft_vec3_prod(vp.pdv, -0.5F * rand() / (RAND_MAX + 1.0F)))), cp)))));
 		++k;
 	}
-	return (ft_color_build(color, _SPP + 1));
+	return (ft_pixel_color(color, _SAMPLES_PER_PIXEL + 1));
 }
 
 void	ft_ray_tracing(t_xclient *xclient)
@@ -46,10 +44,9 @@ void	ft_ray_tracing(t_xclient *xclient)
 		i = 0;
 		while (i < _WIDTH)
 		{
-			ft_pixel_put(xclient, i, j, \
-				ft_color_sample(xclient->scene, vp, \
-					ft_vec3_sum(vp.p00, ft_vec3_sum(\
-						ft_vec3_prod(vp.pdu, i), ft_vec3_prod(vp.pdv, j)))));
+			ft_pixel_put(xclient, i, j, ft_super_sampling(xclient->scene, vp, \
+				ft_vec3_sum(vp.p00, ft_vec3_sum(\
+				ft_vec3_prod(vp.pdu, i), ft_vec3_prod(vp.pdv, j)))));
 			++i;
 		}
 		++j;
