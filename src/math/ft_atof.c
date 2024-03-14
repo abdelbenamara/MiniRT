@@ -6,13 +6,13 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 19:29:05 by abenamar          #+#    #+#             */
-/*   Updated: 2024/02/20 23:53:01 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/03/13 15:40:17 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-static uint8_t	ft_isdouble(const char *nptr)
+static uint8_t	ft_isfloat(const char *nptr)
 {
 	while (*nptr == ' ' || (9 <= *nptr && *nptr <= 13))
 		++nptr;
@@ -31,42 +31,45 @@ static uint8_t	ft_isdouble(const char *nptr)
 	return (1);
 }
 
-static size_t	ft_intlen(int n)
+static float	ft_intlenf(int n)
 {
-	size_t			len;
+	float			lenf;
 	unsigned int	i;
 
-	len = 0;
+	lenf = 0.0F;
 	i = n;
 	if (!n)
-		++len;
+		lenf += 1.0F;
 	else if (n < 0)
 	{
-		++len;
+		lenf += 1.0F;
 		i = -n;
 	}
 	while (i > 0)
 	{
-		++len;
+		lenf += 1.0F;
 		i = i / 10;
 	}
-	return (len);
+	return (lenf);
 }
 
-double	ft_atof(const char *nptr)
+float	ft_atof(const char *nptr)
 {
-	double	d;
+	float	f;
 	char	*s;
-	int		i;
+	float	d;
 
-	if (!ft_isdouble(nptr))
-		return (nan(""));
-	d = ft_atoi(nptr);
+	if (!ft_isfloat(nptr))
+		return (nanf(""));
+	f = ft_atoi(nptr);
 	s = ft_strchr(nptr, '.');
 	if (!s)
-		return (d);
-	i = ft_atoi(s + 1);
+		return (f);
+	d = ft_atoi(s + 1);
+	d /= powf(10.0F, ft_intlenf(d));
 	while (*nptr == ' ' || (9 <= *nptr && *nptr <= 13))
 		++nptr;
-	return (d + (1.0 - 2.0 * (*nptr == '-')) * i / pow(10.0, ft_intlen(i)));
+	if (*nptr == '-')
+		return (f - d);
+	return (f + d);
 }
