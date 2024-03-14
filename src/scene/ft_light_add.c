@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 12:48:21 by abenamar          #+#    #+#             */
-/*   Updated: 2024/02/08 23:42:19 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/03/14 16:20:25 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ uint8_t	ft_light_add(t_scene *scene, char **info)
 {
 	t_light	*light;
 	t_list	*new;
-	t_vec3	*u;
 
 	if (ft_tab_size(info) != 4)
 		return (ft_pstderr(__ERR_4), 0);
@@ -24,18 +23,16 @@ uint8_t	ft_light_add(t_scene *scene, char **info)
 	new = ft_lstnew(light);
 	if (!light || !new)
 		return (ft_pstderr(__ERR_2), free(light), free(new), 0);
-	u = ft_vec3_new(info[1]);
-	if (!u)
+	light->position = ft_vec3_read(info[1]);
+	if (isnanf(light->position.x))
 		return (ft_lstdelone(new, free), 0);
-	light->position = *u;
-	free(u);
-	light->bratio = ft_atof(info[2]);
-	if (isnan(light->bratio))
+	light->brightness = ft_atof(info[2]);
+	if (isnanf(light->brightness))
 		return (ft_pstderr(__ERR_5), ft_lstdelone(new, free), 0);
-	if (light->bratio < 0.0 || light->bratio > 1.0)
+	if (light->brightness < 0.0F || light->brightness > 1.0F)
 		return (ft_pstderr(__ERR_6), ft_lstdelone(new, free), 0);
 	light->color = ft_color_read(info[3]);
-	if (isnan(light->color.x))
+	if (isnanf(light->color.x))
 		return (ft_lstdelone(new, free), 0);
 	ft_lstadd_front(&scene->lights, new);
 	return (1);
