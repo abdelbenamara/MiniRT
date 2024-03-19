@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 00:19:48 by abenamar          #+#    #+#             */
-/*   Updated: 2024/03/13 13:44:27 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/03/18 22:23:04 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_viewport	ft_viewport(t_camera *camera)
 {
 	const t_vec3	o = ft_vec3_unit(\
 		ft_vec3_rotate(camera->orientation, camera->theta));
-	const float		v_w = 2.0F * tanf((camera->fov * __M_PIF / 180.0F) * 0.5F);
+	const float		v_w = 2.0F * tanf(0.5F * (camera->fov * __M_PIF / 180.0F));
 	const t_vec3	u = ft_vec3_unit(ft_vec3_cross(\
 		ft_vec3_rotate(ft_vec3(0.0F, 1.0F, 0.0F), camera->theta), o));
 	t_viewport		vp;
