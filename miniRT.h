@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 18:08:16 by abenamar          #+#    #+#             */
-/*   Updated: 2024/03/14 16:56:57 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/03/19 00:54:16 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <fcntl.h>
 # include "float.h"
 # include <math.h>
+# include <stdbool.h>
 # include <X11/Xlib.h>
 # include <X11/Xutil.h>
 # include "mlx.h"
@@ -111,6 +112,8 @@ typedef struct s_sphere
 {
 	t_point3	center;
 	float		radius;
+	float		radius_squared;
+	float		radius_reciprocal;
 	t_color		color;
 }	t_sphere;
 
@@ -124,9 +127,12 @@ typedef struct s_plane
 
 typedef struct s_cylinder
 {
-	t_point3	center;
+	t_point3	top;
+	t_point3	base;
 	t_vec3		axis;
 	float		radius;
+	float		radius_squared;
+	float		radius_reciprocal;
 	float		height;
 	t_color		color;
 	t_vec3		theta;
@@ -144,14 +150,14 @@ typedef struct s_scene
 
 t_color		ft_color_read(const char *str);
 t_vec3		ft_vec3_read(const char *str);
-uint8_t		ft_vec3_is_normalized(t_vec3 u);
+bool		ft_vec3_is_normalized(t_vec3 u);
 
-uint8_t		ft_ambiance_init(t_scene *scene, char **info);
-uint8_t		ft_camera_init(t_scene *scene, char **info);
-uint8_t		ft_light_add(t_scene *scene, char **info);
-uint8_t		ft_sphere_add(t_scene *scene, char **info);
-uint8_t		ft_plane_add(t_scene *scene, char **info);
-uint8_t		ft_cylinder_add(t_scene *scene, char **info);
+bool		ft_ambiance_init(t_scene *scene, char **info);
+bool		ft_camera_init(t_scene *scene, char **info);
+bool		ft_light_add(t_scene *scene, char **info);
+bool		ft_sphere_add(t_scene *scene, char **info);
+bool		ft_plane_add(t_scene *scene, char **info);
+bool		ft_cylinder_add(t_scene *scene, char **info);
 void		ft_scene_free(t_scene *scene);
 t_scene		*ft_scene_new(const char *file);
 
@@ -174,7 +180,7 @@ t_scene		*ft_scene_new(const char *file);
 # endif
 
 # ifndef _SAMPLES_PER_PIXEL
-#  define _SAMPLES_PER_PIXEL	0
+#  define _SAMPLES_PER_PIXEL	1
 # endif
 
 typedef struct s_xclient
@@ -182,12 +188,11 @@ typedef struct s_xclient
 	void		*mlx;
 	void		*win;
 	void		*img;
-	void		*buf;
 	char		*data;
 	int			bpp;
 	int			lsize;
 	int			endian;
-	uint8_t		update;
+	bool		update;
 	t_scene		*scene;
 }	t_xclient;
 
@@ -216,16 +221,15 @@ typedef struct s_hit
 
 void		ft_xclient_free(t_xclient *xclient);
 t_xclient	*ft_xclient_new(t_scene *scene);
-void		ft_xclient_buffer(t_xclient *xclient);
-void		ft_xclient_flush(t_xclient *xclient);
 
 t_viewport	ft_viewport(t_camera *camera);
 t_ray		ft_ray(t_point3 origin, t_vec3 direction);
+t_vec3		ft_face_normal(t_vec3 direction, t_vec3 normal);
+void		ft_sphere_hit(t_sphere *sp, t_ray r, t_hit *h);
+void		ft_plane_hit(t_plane *pl, t_ray r, t_hit *h);
 void		ft_cylinder_hit(t_cylinder *cy, t_ray r, t_hit *h);
-t_color		ft_scene_hit(t_scene *scene, t_ray r);
 
-int			ft_pixel_color(t_color color, int spp);
-void		ft_pixel_put(t_xclient *xclient, int x, int y, int color);
+void		ft_pixel_put(t_xclient *xclient, int x, int y, t_color color);
 void		ft_ray_tracing(t_xclient *xclient);
 int			ft_key_press(int keycode, t_xclient *xclient);
 
