@@ -6,7 +6,7 @@
 #    By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/28 18:35:02 by abenamar          #+#    #+#              #
-#    Updated: 2024/03/14 16:57:16 by abenamar         ###   ########.fr        #
+#    Updated: 2024/03/19 00:56:35 by abenamar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -94,15 +94,14 @@ SRC_RENDER := src/render
 
 SRCS += $(SRC_RENDER)/ft_xclient_free.c
 SRCS += $(SRC_RENDER)/ft_xclient_new.c
-SRCS += $(SRC_RENDER)/ft_xclient_buffer.c
-SRCS += $(SRC_RENDER)/ft_xclient_flush.c
 
 SRCS += $(SRC_RENDER)/ft_viewport.c
 SRCS += $(SRC_RENDER)/ft_ray.c
+SRCS += $(SRC_RENDER)/ft_face_normal.c
+SRCS += $(SRC_RENDER)/ft_sphere_hit.c
+SRCS += $(SRC_RENDER)/ft_plane_hit.c
 SRCS += $(SRC_RENDER)/ft_cylinder_hit.c
-SRCS += $(SRC_RENDER)/ft_scene_hit.c
 
-SRCS += $(SRC_RENDER)/ft_pixel_color.c
 SRCS += $(SRC_RENDER)/ft_pixel_put.c
 SRCS += $(SRC_RENDER)/ft_ray_tracing.c
 SRCS += $(SRC_RENDER)/ft_key_press.c
