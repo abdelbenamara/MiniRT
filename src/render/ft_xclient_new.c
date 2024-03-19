@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 18:21:54 by abenamar          #+#    #+#             */
-/*   Updated: 2024/02/29 01:15:11 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/03/19 00:51:30 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ t_xclient	*ft_xclient_new(t_scene *scene)
 	xclient->mlx = mlx_init();
 	xclient->win = NULL;
 	xclient->img = NULL;
-	xclient->buf = NULL;
 	xclient->update = 1;
 	xclient->scene = scene;
 	if (!xclient->mlx)
@@ -30,5 +29,10 @@ t_xclient	*ft_xclient_new(t_scene *scene)
 	xclient->win = mlx_new_window(xclient->mlx, _WIDTH, _HEIGHT, _TITLE);
 	if (!xclient->win)
 		return (ft_xclient_free(xclient), NULL);
+	xclient->img = mlx_new_image(xclient->mlx, _WIDTH, _HEIGHT);
+	if (!xclient->img)
+		return (ft_xclient_free(xclient), NULL);
+	xclient->data = mlx_get_data_addr(\
+		xclient->img, &xclient->bpp, &xclient->lsize, &xclient->endian);
 	return (xclient);
 }
