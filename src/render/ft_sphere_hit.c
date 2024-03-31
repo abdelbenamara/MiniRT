@@ -6,23 +6,23 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 13:46:16 by abenamar          #+#    #+#             */
-/*   Updated: 2024/03/18 14:22:45 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/04/01 01:14:21 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-void	ft_sphere_hit(t_sphere *sp, t_ray r, t_hit *h)
+void	ft_sphere_hit(t_sphere *const sp, t_ray const r, t_hit *const h)
 {
-	const t_vec3	oc = ft_vec3_diff(sp->center, r.origin);
-	const float		nb = ft_vec3_dot(oc, r.direction);
-	const float		c = ft_vec3_dot(oc, oc) - sp->radius_squared;
+	t_vec3f const	oc = ft_vec3f_diff(sp->center, r.origin);
+	float const		nb = ft_vec3f_dot(oc, r.direction);
+	float const		c = ft_vec3f_dot(oc, oc) - sp->radius_squared;
 	float			d;
 	float			t;
 
 	if (!isfinite(nb) || !isfinite(c) || (signbit(nb) && c >= 0.0F))
 		return ;
-	d = powf(nb, 2.0F) - c;
+	d = nb * nb - c;
 	if (!isfinite(d) || signbit(d))
 		return ;
 	if (c >= 0.0F)
@@ -32,8 +32,8 @@ void	ft_sphere_hit(t_sphere *sp, t_ray r, t_hit *h)
 	if (!isfinite(t) || signbit(t) || h->t <= t)
 		return ;
 	h->t = t;
-	h->point = ft_vec3_sum(r.origin, ft_vec3_prod(r.direction, h->t));
-	h->normal = ft_face_normal(r.direction, ft_vec3_prod(\
-		ft_vec3_diff(h->point, sp->center), sp->radius_reciprocal));
+	h->point = ft_vec3f_sum(r.origin, ft_vec3f_prod(r.direction, h->t));
+	h->normal = ft_face_normal(r.direction, ft_vec3f_prod(\
+		ft_vec3f_diff(h->point, sp->center), sp->radius_reciprocal));
 	h->color = sp->color;
 }
