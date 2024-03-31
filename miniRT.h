@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 18:08:16 by abenamar          #+#    #+#             */
-/*   Updated: 2024/03/19 00:54:16 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/04/01 01:13:05 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,11 @@
 # define __ERR_13	"Error: invalid distance (not greater or equal to 0)\n"
 # define __ERR_14	"Error: no camera ('C' identifier) is declared\n"
 
-ssize_t		ft_pstderr(const char *str);
-void		ft_perror(const char *str);
+ssize_t		ft_pstderr(char const *str);
+void		ft_perror(char const *str);
 
 void		ft_tab_free(char **tab);
-size_t		ft_tab_size(char **tab);
+size_t		ft_tab_size(char *const *tab);
 
 /* ************************************************************************** */
 /*                                                                            */
@@ -58,24 +58,32 @@ size_t		ft_tab_size(char **tab);
 
 # define __M_PIF	3.14159265358979323846F
 
-typedef struct s_vec3
+typedef struct s_vec3f
 {
 	float	x;
 	float	y;
 	float	z;
-}	t_vec3;
+}	t_vec3f;
 
-float		ft_atof(const char *nptr);
+typedef struct s_quat4f
+{
+	t_vec3f	xyz;	
+	float	w;
+}	t_quat4f;
 
-t_vec3		ft_vec3(float x, float y, float z);
-t_vec3		ft_vec3_sum(t_vec3 u, t_vec3 v);
-t_vec3		ft_vec3_diff(t_vec3 u, t_vec3 v);
-t_vec3		ft_vec3_prod(t_vec3 u, float t);
-float		ft_vec3_len(t_vec3 u);
-t_vec3		ft_vec3_unit(t_vec3 u);
-float		ft_vec3_dot(t_vec3 u, t_vec3 v);
-t_vec3		ft_vec3_cross(t_vec3 u, t_vec3 v);
-t_vec3		ft_vec3_rotate(t_vec3 u, t_vec3 theta);
+float		ft_atof(char const *nptr);
+
+t_vec3f		ft_vec3f(float const x, float const y, float const z);
+t_vec3f		ft_vec3f_sum(t_vec3f const u, t_vec3f const v);
+t_vec3f		ft_vec3f_diff(t_vec3f const u, t_vec3f const v);
+t_vec3f		ft_vec3f_prod(t_vec3f const u, float const t);
+t_vec3f		ft_vec3f_unit(t_vec3f const u);
+float		ft_vec3f_dot(t_vec3f const u, t_vec3f const v);
+t_vec3f		ft_vec3f_cross(t_vec3f const u, t_vec3f const v);
+
+t_quat4f	ft_quat4f(t_vec3f const xyz, float const w);
+t_quat4f	ft_quat4f_prod(t_quat4f const q, t_quat4f const p);
+t_quat4f	ft_quat4f_unit(t_quat4f const q);
 
 /* ************************************************************************** */
 /*                                                                            */
@@ -83,59 +91,58 @@ t_vec3		ft_vec3_rotate(t_vec3 u, t_vec3 theta);
 /*                                                                            */
 /* ************************************************************************** */
 
-typedef t_vec3	t_color;
+typedef t_vec3f	t_color3f;
 
 typedef struct s_ambiance
 {
-	float	lighting;
-	t_color	color;
+	float		lighting;
+	t_color3f	color;
 }	t_ambiance;
 
-typedef t_vec3	t_point3;
+typedef t_vec3f	t_point3f;
 
 typedef struct s_camera
 {
-	t_point3	position;
-	t_vec3		orientation;
-	int			fov;
-	t_vec3		theta;
+	t_point3f	position;
+	t_vec3f		orientation;
+	float		fov;
+	t_quat4f	rotation;
+	t_vec3f		vup;
 }	t_camera;
 
 typedef struct s_light
 {
-	t_point3	position;
+	t_point3f	position;
 	float		brightness;
-	t_color		color;
+	t_color3f	color;
 }	t_light;
 
 typedef struct s_sphere
 {
-	t_point3	center;
+	t_point3f	center;
 	float		radius;
 	float		radius_squared;
 	float		radius_reciprocal;
-	t_color		color;
+	t_color3f	color;
 }	t_sphere;
 
 typedef struct s_plane
 {
-	t_point3	point;
-	t_vec3		normal;
-	t_color		color;
-	t_vec3		theta;
+	t_point3f	point;
+	t_vec3f		normal;
+	t_color3f	color;
 }	t_plane;
 
 typedef struct s_cylinder
 {
-	t_point3	top;
-	t_point3	base;
-	t_vec3		axis;
+	t_point3f	top;
+	t_point3f	base;
+	t_vec3f		axis;
 	float		radius;
 	float		radius_squared;
 	float		radius_reciprocal;
 	float		height;
-	t_color		color;
-	t_vec3		theta;
+	t_color3f	color;
 }	t_cylinder;
 
 typedef struct s_scene
@@ -148,18 +155,18 @@ typedef struct s_scene
 	t_list		*cylinders;
 }	t_scene;
 
-t_color		ft_color_read(const char *str);
-t_vec3		ft_vec3_read(const char *str);
-bool		ft_vec3_is_normalized(t_vec3 u);
+t_color3f	ft_color3f_read(char const *str);
+t_vec3f		ft_vec3f_read(char const *str);
+bool		ft_vec3f_isnormalized(t_vec3f const u);
 
-bool		ft_ambiance_init(t_scene *scene, char **info);
-bool		ft_camera_init(t_scene *scene, char **info);
-bool		ft_light_add(t_scene *scene, char **info);
-bool		ft_sphere_add(t_scene *scene, char **info);
-bool		ft_plane_add(t_scene *scene, char **info);
-bool		ft_cylinder_add(t_scene *scene, char **info);
+bool		ft_ambiance_init(t_scene *const scene, char *const *info);
+bool		ft_camera_init(t_scene *const scene, char *const *info);
+bool		ft_light_add(t_scene *const scene, char *const *info);
+bool		ft_sphere_add(t_scene *const scene, char *const *info);
+bool		ft_plane_add(t_scene *const scene, char *const *info);
+bool		ft_cylinder_add(t_scene *const scene, char *const *info);
 void		ft_scene_free(t_scene *scene);
-t_scene		*ft_scene_new(const char *file);
+t_scene		*ft_scene_new(char const *file);
 
 /* ************************************************************************** */
 /*                                                                            */
@@ -198,39 +205,49 @@ typedef struct s_xclient
 
 typedef struct s_viewport
 {
-	t_vec3		u;
-	t_vec3		v;
-	t_vec3		pdu;
-	t_vec3		pdv;
-	t_point3	p00;
+	t_vec3f		u;
+	t_vec3f		v;
+	t_vec3f		pdu;
+	t_vec3f		pdv;
+	t_point3f	p00;
 }	t_viewport;
 
 typedef struct s_ray
 {
-	t_point3	origin;
-	t_vec3		direction;
+	t_point3f	origin;
+	t_vec3f		direction;
 }	t_ray;
 
 typedef struct s_hit
 {
 	float		t;
-	t_point3	point;
-	t_vec3		normal;
-	t_color		color;
+	t_point3f	point;
+	t_vec3f		normal;
+	t_color3f	color;
 }	t_hit;
 
+typedef struct s_basis
+{
+	t_vec3f	x;
+	t_vec3f	y;
+	t_vec3f	z;
+}	t_basis;
+
 void		ft_xclient_free(t_xclient *xclient);
-t_xclient	*ft_xclient_new(t_scene *scene);
+t_xclient	*ft_xclient_new(t_scene *const scene);
 
-t_viewport	ft_viewport(t_camera *camera);
-t_ray		ft_ray(t_point3 origin, t_vec3 direction);
-t_vec3		ft_face_normal(t_vec3 direction, t_vec3 normal);
-void		ft_sphere_hit(t_sphere *sp, t_ray r, t_hit *h);
-void		ft_plane_hit(t_plane *pl, t_ray r, t_hit *h);
-void		ft_cylinder_hit(t_cylinder *cy, t_ray r, t_hit *h);
+t_ray		ft_ray(t_point3f const origin, t_vec3f const direction);
+t_vec3f		ft_face_normal(t_vec3f const direction, t_vec3f const normal);
+void		ft_sphere_hit(t_sphere *const sp, t_ray const r, t_hit *const h);
+void		ft_plane_hit(t_plane *const pl, t_ray const r, t_hit *const h);
+void		ft_cylinder_hit(t_cylinder *const cy, \
+				t_ray const r, t_hit *const h);
 
-void		ft_pixel_put(t_xclient *xclient, int x, int y, t_color color);
-void		ft_ray_tracing(t_xclient *xclient);
-int			ft_key_press(int keycode, t_xclient *xclient);
+void		ft_pixel_put(t_xclient const *const xclient, \
+				int const x, int const y, t_color3f const color);
+void		ft_ray_tracing(t_xclient const *const xclient);
+t_basis		ft_basis(t_vec3f const x, t_vec3f const y, t_vec3f const z);
+t_vec3f		ft_vec3f_rotate(t_vec3f const u, t_quat4f const q);
+int			ft_key_press(int const keycode, t_xclient *const xclient);
 
 #endif
