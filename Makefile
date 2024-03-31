@@ -6,7 +6,7 @@
 #    By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/28 18:35:02 by abenamar          #+#    #+#              #
-#    Updated: 2024/03/19 00:56:35 by abenamar         ###   ########.fr        #
+#    Updated: 2024/04/01 01:13:10 by abenamar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,15 +53,17 @@ SRC_MATH := src/math
 
 SRCS += $(SRC_MATH)/ft_atof.c
 
-SRCS += $(SRC_MATH)/ft_vec3.c
-SRCS += $(SRC_MATH)/ft_vec3_sum.c
-SRCS += $(SRC_MATH)/ft_vec3_diff.c
-SRCS += $(SRC_MATH)/ft_vec3_prod.c
-SRCS += $(SRC_MATH)/ft_vec3_len.c
-SRCS += $(SRC_MATH)/ft_vec3_unit.c
-SRCS += $(SRC_MATH)/ft_vec3_dot.c
-SRCS += $(SRC_MATH)/ft_vec3_cross.c
-SRCS += $(SRC_MATH)/ft_vec3_rotate.c
+SRCS += $(SRC_MATH)/ft_vec3f.c
+SRCS += $(SRC_MATH)/ft_vec3f_sum.c
+SRCS += $(SRC_MATH)/ft_vec3f_diff.c
+SRCS += $(SRC_MATH)/ft_vec3f_prod.c
+SRCS += $(SRC_MATH)/ft_vec3f_unit.c
+SRCS += $(SRC_MATH)/ft_vec3f_dot.c
+SRCS += $(SRC_MATH)/ft_vec3f_cross.c
+
+SRCS += $(SRC_MATH)/ft_quat4f.c
+SRCS += $(SRC_MATH)/ft_quat4f_prod.c
+SRCS += $(SRC_MATH)/ft_quat4f_unit.c
 
 # **************************************************************************** #
 #                                                                              #
@@ -71,9 +73,9 @@ SRCS += $(SRC_MATH)/ft_vec3_rotate.c
 
 SRC_SCENE := src/scene
 
-SRCS += $(SRC_SCENE)/ft_color_read.c
-SRCS += $(SRC_SCENE)/ft_vec3_read.c
-SRCS += $(SRC_SCENE)/ft_vec3_is_normalized.c
+SRCS += $(SRC_SCENE)/ft_color3f_read.c
+SRCS += $(SRC_SCENE)/ft_vec3f_read.c
+SRCS += $(SRC_SCENE)/ft_vec3f_isnormalized.c
 
 SRCS += $(SRC_SCENE)/ft_ambiance_init.c
 SRCS += $(SRC_SCENE)/ft_camera_init.c
@@ -95,7 +97,6 @@ SRC_RENDER := src/render
 SRCS += $(SRC_RENDER)/ft_xclient_free.c
 SRCS += $(SRC_RENDER)/ft_xclient_new.c
 
-SRCS += $(SRC_RENDER)/ft_viewport.c
 SRCS += $(SRC_RENDER)/ft_ray.c
 SRCS += $(SRC_RENDER)/ft_face_normal.c
 SRCS += $(SRC_RENDER)/ft_sphere_hit.c
@@ -104,6 +105,8 @@ SRCS += $(SRC_RENDER)/ft_cylinder_hit.c
 
 SRCS += $(SRC_RENDER)/ft_pixel_put.c
 SRCS += $(SRC_RENDER)/ft_ray_tracing.c
+SRCS += $(SRC_RENDER)/ft_basis.c
+SRCS += $(SRC_RENDER)/ft_vec3f_rotate.c
 SRCS += $(SRC_RENDER)/ft_key_press.c
 
 # **************************************************************************** #
