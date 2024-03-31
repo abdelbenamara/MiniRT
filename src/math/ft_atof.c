@@ -6,13 +6,13 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 19:29:05 by abenamar          #+#    #+#             */
-/*   Updated: 2024/03/19 00:33:50 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/03/24 13:52:54 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-static bool	ft_isfloat(const char *nptr)
+static bool	ft_isfloat(char const *nptr)
 {
 	while (*nptr == ' ' || (9 <= *nptr && *nptr <= 13))
 		++nptr;
@@ -53,7 +53,7 @@ static float	ft_intlenf(int n)
 	return (lenf);
 }
 
-float	ft_atof(const char *nptr)
+float	ft_atof(char const *nptr)
 {
 	float	f;
 	char	*s;
