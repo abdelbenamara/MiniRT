@@ -6,13 +6,13 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 22:48:06 by abenamar          #+#    #+#             */
-/*   Updated: 2024/01/03 12:54:45 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/03/24 14:11:02 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-size_t	ft_tab_size(char **tab)
+size_t	ft_tab_size(char *const *tab)
 {
 	size_t	i;
 
