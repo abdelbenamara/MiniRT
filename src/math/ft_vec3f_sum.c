@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_vec3_sum.c                                      :+:      :+:    :+:   */
+/*   ft_vec3f_sum.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 23:32:11 by abenamar          #+#    #+#             */
-/*   Updated: 2024/02/08 23:42:19 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/03/24 14:31:48 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-t_vec3	ft_vec3_sum(t_vec3 u, t_vec3 v)
+t_vec3f	ft_vec3f_sum(t_vec3f const u, t_vec3f const v)
 {
-	return (ft_vec3(u.x + v.x, u.y + v.y, u.z + v.z));
+	return (ft_vec3f(u.x + v.x, u.y + v.y, u.z + v.z));
 }
