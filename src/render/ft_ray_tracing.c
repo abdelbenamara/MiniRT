@@ -6,19 +6,37 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 00:23:38 by abenamar          #+#    #+#             */
-/*   Updated: 2024/03/19 00:51:48 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/04/01 01:12:31 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-static t_color	ft_hit_color(t_scene *scene, t_ray r)
+static t_viewport	ft_viewport(t_camera const *const camera)
+{
+	float const		vpw = 2.0F * tanf(0.5F * camera->fov);
+	t_vec3f const	u = ft_vec3f_cross(camera->vup, camera->orientation);
+	t_viewport		viewport;
+
+	viewport.u = ft_vec3f_prod(u, vpw);
+	viewport.v = ft_vec3f_prod(\
+		ft_vec3f_cross(camera->orientation, u), -vpw * _HEIGHT / _WIDTH);
+	viewport.pdu = ft_vec3f_prod(viewport.u, 1.0F / _WIDTH);
+	viewport.pdv = ft_vec3f_prod(viewport.v, 1.0F / _HEIGHT);
+	viewport.p00 = ft_vec3f_sum(ft_vec3f_diff(ft_vec3f_diff(\
+		ft_vec3f_diff(camera->position, camera->orientation), \
+		ft_vec3f_prod(viewport.u, 0.5F)), ft_vec3f_prod(viewport.v, 0.5F)), \
+		ft_vec3f_prod(ft_vec3f_sum(viewport.pdu, viewport.pdv), 0.5F));
+	return (viewport);
+}
+
+static t_color3f	ft_hit_color(t_scene const *const scene, t_ray const r)
 {
 	t_hit	h;
 	t_list	*lst;
 
 	h.t = INFINITY;
-	h.color = ft_vec3(0.0F, 0.0F, 0.0F);
+	h.color = ft_vec3f(0.0F, 0.0F, 0.0F);
 	lst = scene->spheres;
 	while (lst)
 		(ft_sphere_hit(lst->content, r, &h), lst = lst->next);
@@ -31,28 +49,34 @@ static t_color	ft_hit_color(t_scene *scene, t_ray r)
 	return (h.color);
 }
 
-static t_color	ft_super_sampling(t_scene *scene, t_viewport vp, t_point3 p)
+static t_color3f
+	ft_super_sampling(t_scene const *const scene, int const i, int const j)
 {
-	const t_point3		cp = scene->camera->position;
+	t_viewport const	vp = ft_viewport(scene->camera);
+	t_point3f const		point = ft_vec3f_sum(vp.p00, ft_vec3f_sum(\
+		ft_vec3f_prod(vp.pdu, i), ft_vec3f_prod(vp.pdv, j)));
+	t_vec3f const		origin = scene->camera->position;
 	int					k;
-	t_color				color;
+	t_color3f			color;
 
-	color = ft_hit_color(scene, ft_ray(cp, ft_vec3_unit(ft_vec3_diff(p, cp))));
+	color = ft_hit_color(\
+		scene, ft_ray(origin, ft_vec3f_unit(ft_vec3f_diff(point, origin))));
 	k = 1;
 	while (k < _SAMPLES_PER_PIXEL)
 	{
-		color = ft_vec3_sum(color, ft_hit_color(scene, \
-			ft_ray(cp, ft_vec3_unit(ft_vec3_diff(ft_vec3_sum(p, ft_vec3_sum(\
-			ft_vec3_prod(vp.pdu, -0.5F * rand() / (RAND_MAX + 1.0F)), \
-			ft_vec3_prod(vp.pdv, -0.5F * rand() / (RAND_MAX + 1.0F)))), cp)))));
+		color = ft_vec3f_sum(color, ft_hit_color(scene, \
+			ft_ray(origin, ft_vec3f_unit(ft_vec3f_diff(\
+			ft_vec3f_sum(point, ft_vec3f_sum(\
+			ft_vec3f_prod(vp.pdu, -0.5F * rand() / (RAND_MAX + 1.0F)), \
+			ft_vec3f_prod(vp.pdv, -0.5F * rand() / (RAND_MAX + 1.0F)))), \
+			origin)))));
 		++k;
 	}
 	return (color);
 }
 
-void	ft_ray_tracing(t_xclient *xclient)
+void	ft_ray_tracing(t_xclient const *const xclient)
 {
-	const t_viewport	vp = ft_viewport(xclient->scene->camera);
 	int					i;
 	int					j;
 
@@ -62,9 +86,8 @@ void	ft_ray_tracing(t_xclient *xclient)
 		i = 0;
 		while (i < _WIDTH)
 		{
-			ft_pixel_put(xclient, i, j, ft_super_sampling(xclient->scene, vp, \
-				ft_vec3_sum(vp.p00, ft_vec3_sum(\
-				ft_vec3_prod(vp.pdu, i), ft_vec3_prod(vp.pdv, j)))));
+			ft_pixel_put(xclient, i, j, \
+				ft_super_sampling(xclient->scene, i, j));
 			++i;
 		}
 		++j;
