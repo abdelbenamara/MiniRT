@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_vec3_dot.c                                      :+:      :+:    :+:   */
+/*   ft_vec3f_dot.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 23:34:23 by abenamar          #+#    #+#             */
-/*   Updated: 2024/03/13 11:43:47 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/03/24 14:31:48 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-float	ft_vec3_dot(t_vec3 u, t_vec3 v)
+float	ft_vec3f_dot(t_vec3f const u, t_vec3f const v)
 {
 	return (u.x * v.x + u.y * v.y + u.z * v.z);
 }
