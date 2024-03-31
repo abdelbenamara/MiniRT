@@ -6,15 +6,15 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 11:00:24 by abenamar          #+#    #+#             */
-/*   Updated: 2024/03/16 13:33:08 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/03/24 14:29:30 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-static bool	ft_element_setup(t_scene *scene, char **info)
+static bool	ft_element_setup(t_scene *const scene, char *const *info)
 {
-	static bool	(*ft_setup[])(t_scene *, char **) = {
+	static bool	(*ft_setup[])(t_scene *const, char *const *) = {
 		ft_ambiance_init, ft_camera_init, ft_light_add,
 		ft_sphere_add, ft_plane_add, ft_cylinder_add
 	};
@@ -37,7 +37,7 @@ static bool	ft_element_setup(t_scene *scene, char **info)
 	return (true);
 }
 
-static bool	ft_scene_setup(t_scene *scene, const int fd)
+static bool	ft_scene_setup(t_scene *const scene, int const fd)
 {
 	char	*line;
 	char	**info;
@@ -64,7 +64,7 @@ static bool	ft_scene_setup(t_scene *scene, const int fd)
 	return (true);
 }
 
-t_scene	*ft_scene_new(const char *file)
+t_scene	*ft_scene_new(char const *file)
 {
 	t_scene	*scene;
 	int		fd;
