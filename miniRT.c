@@ -6,13 +6,13 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 18:09:55 by abenamar          #+#    #+#             */
-/*   Updated: 2024/02/29 01:16:27 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/03/24 14:38:51 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-static int	ft_frame_render(t_xclient *xclient)
+static int	ft_frame_render(t_xclient *const xclient)
 {
 	if (xclient->update)
 	{
