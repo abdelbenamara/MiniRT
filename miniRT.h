@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 18:08:16 by abenamar          #+#    #+#             */
-/*   Updated: 2024/04/01 01:13:05 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/04/03 02:04:40 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,34 +21,6 @@
 # include <X11/Xutil.h>
 # include "mlx.h"
 # include "libft.h"
-
-/* ************************************************************************** */
-/*                                                                            */
-/*                                   utils                                    */
-/*                                                                            */
-/* ************************************************************************** */
-
-# define __USAGE	"Usage: miniRT file.rt\n"
-# define __ERR_1	"Error: wrong file extension (not *.rt)\n"
-# define __ERR_2	"Error: out of memory\n"
-# define __ERR_3	"Error: capital letter element declared more than once\n"
-# define __ERR_4	"Error: wrong number of element informations\n"
-# define __ERR_5	"Error: element information is NaN (not a number)\n"
-# define __ERR_6	"Error: invalid lightning ratio (not in range [0,1])\n"
-# define __ERR_7	"Error: wrong number of RGB colors (not 3)\n"
-# define __ERR_8	"Error: invalid value in RGB color (not in range [0,255])\n"
-# define __ERR_9	"Error: wrong number of 3D vector coordinates (not 3)\n"
-# define __ERR_10	"Error: invalid normalized value (not in range [-1,1])\n"
-# define __ERR_11	"Error: invalid field of view (not in range [0,180])\n"
-# define __ERR_12	"Error: wrong element identifier (not A,C,L,sp,pl,cy)\n"
-# define __ERR_13	"Error: invalid distance (not greater or equal to 0)\n"
-# define __ERR_14	"Error: no camera ('C' identifier) is declared\n"
-
-ssize_t		ft_pstderr(char const *str);
-void		ft_perror(char const *str);
-
-void		ft_tab_free(char **tab);
-size_t		ft_tab_size(char *const *tab);
 
 /* ************************************************************************** */
 /*                                                                            */
@@ -71,8 +43,6 @@ typedef struct s_quat4f
 	float	w;
 }	t_quat4f;
 
-float		ft_atof(char const *nptr);
-
 t_vec3f		ft_vec3f(float const x, float const y, float const z);
 t_vec3f		ft_vec3f_sum(t_vec3f const u, t_vec3f const v);
 t_vec3f		ft_vec3f_diff(t_vec3f const u, t_vec3f const v);
@@ -87,11 +57,45 @@ t_quat4f	ft_quat4f_unit(t_quat4f const q);
 
 /* ************************************************************************** */
 /*                                                                            */
-/*                                   scene                                    */
+/*                                   utils                                    */
 /*                                                                            */
 /* ************************************************************************** */
 
+# define __USAGE	"Usage: miniRT file.rt\n"
+# define __ERR_1	"Error: wrong file extension (not *.rt)\n"
+# define __ERR_2	"Error: out of memory (failed allocation)\n"
+# define __ERR_3	"Error: duplicated element identifier (not unique A or C)\n"
+# define __ERR_4	"Error: wrong number of element informations\n"
+# define __ERR_5	"Error: wrong floating-point value (not finite number)\n"
+# define __ERR_6	"Error: invalid lightning ratio (not in range [0,1])\n"
+# define __ERR_7	"Error: wrong number of RGB colors (not exactly 3)\n"
+# define __ERR_8	"Error: invalid RGB value (not in range [0,255])\n"
+# define __ERR_9	"Error: wrong number of 3D coordinates (not exactly 3)\n"
+# define __ERR_10	"Error: invalid normalized value (not in range [-1,1])\n"
+# define __ERR_11	"Error: forbidden null vector (not normalized vector)\n"
+# define __ERR_12	"Error: invalid field of view (not in range [0,180])\n"
+# define __ERR_13	"Error: wrong element identifier (not A,C,L,sp,pl,cy)\n"
+# define __ERR_14	"Error: invalid distance (not greater or equal to 0)\n"
+# define __ERR_15	"Error: missing camera declaration (no 'C' identifier)\n"
+
+ssize_t		ft_pstderr(char const *str);
+void		ft_perror(char const *str);
+
+void		ft_tab_free(char **tab);
+size_t		ft_tab_size(char *const *tab);
+
 typedef t_vec3f	t_color3f;
+
+float		ft_str_to_float(char const *nptr);
+t_color3f	ft_str_to_color3f(char const *str);
+t_vec3f		ft_str_to_vec3f(char const *str);
+bool		ft_vec3f_isnormalized(t_vec3f const u);
+
+/* ************************************************************************** */
+/*                                                                            */
+/*                                   scene                                    */
+/*                                                                            */
+/* ************************************************************************** */
 
 typedef struct s_ambiance
 {
@@ -154,10 +158,6 @@ typedef struct s_scene
 	t_list		*planes;
 	t_list		*cylinders;
 }	t_scene;
-
-t_color3f	ft_color3f_read(char const *str);
-t_vec3f		ft_vec3f_read(char const *str);
-bool		ft_vec3f_isnormalized(t_vec3f const u);
 
 bool		ft_ambiance_init(t_scene *const scene, char *const *info);
 bool		ft_camera_init(t_scene *const scene, char *const *info);
@@ -246,7 +246,6 @@ void		ft_cylinder_hit(t_cylinder *const cy, \
 void		ft_pixel_put(t_xclient const *const xclient, \
 				int const x, int const y, t_color3f const color);
 void		ft_ray_tracing(t_xclient const *const xclient);
-t_basis		ft_basis(t_vec3f const x, t_vec3f const y, t_vec3f const z);
 t_vec3f		ft_vec3f_rotate(t_vec3f const u, t_quat4f const q);
 int			ft_key_press(int const keycode, t_xclient *const xclient);
 
