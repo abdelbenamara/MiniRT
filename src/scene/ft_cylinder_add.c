@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 15:36:19 by abenamar          #+#    #+#             */
-/*   Updated: 2024/03/30 18:32:41 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/04/03 00:27:46 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,17 @@
 
 static bool	ft_cylinder_setup(t_cylinder *const cy, char *const *info)
 {
-	cy->radius = ft_atof(info[3]);
-	if (isnan(cy->radius))
+	cy->radius = ft_str_to_float(info[3]);
+	if (!isfinite(cy->radius))
 		return (ft_pstderr(__ERR_5), false);
 	if (signbit(cy->radius))
-		return (ft_pstderr(__ERR_13), false);
-	cy->height = ft_atof(info[4]);
-	if (isnan(cy->height))
+		return (ft_pstderr(__ERR_14), false);
+	cy->height = ft_str_to_float(info[4]);
+	if (!isfinite(cy->height))
 		return (ft_pstderr(__ERR_5), false);
 	if (signbit(cy->height))
-		return (ft_pstderr(__ERR_13), false);
-	cy->color = ft_color3f_read(info[5]);
+		return (ft_pstderr(__ERR_14), false);
+	cy->color = ft_str_to_color3f(info[5]);
 	if (isnan(cy->color.x))
 		return (false);
 	cy->axis = ft_vec3f_unit(cy->axis);
@@ -49,10 +49,10 @@ bool	ft_cylinder_add(t_scene *const scene, char *const *info)
 	new = ft_lstnew(cy);
 	if (!cy || !new)
 		return (ft_pstderr(__ERR_2), free(cy), free(new), false);
-	cy->base = ft_vec3f_read(info[1]);
+	cy->base = ft_str_to_vec3f(info[1]);
 	if (isnan(cy->base.x))
 		return (ft_lstdelone(new, free), false);
-	cy->axis = ft_vec3f_read(info[2]);
+	cy->axis = ft_str_to_vec3f(info[2]);
 	if (isnan(cy->axis.x) || !ft_vec3f_isnormalized(cy->axis))
 		return (ft_lstdelone(new, free), false);
 	if (!ft_cylinder_setup(cy, info))
