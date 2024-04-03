@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_vec3f_read.c                                    :+:      :+:    :+:   */
+/*   ft_str_to_vec3f.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 11:55:24 by abenamar          #+#    #+#             */
-/*   Updated: 2024/03/24 13:52:54 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/04/03 00:28:48 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-t_vec3f	ft_vec3f_read(char const *str)
+t_vec3f	ft_str_to_vec3f(char const *str)
 {
 	char			*comma[2];
 	t_vec3f			u;
@@ -24,13 +24,13 @@ t_vec3f	ft_vec3f_read(char const *str)
 	if (!comma[1] || ft_strchr(comma[1] + 1, ','))
 		return (ft_pstderr(__ERR_9), ft_vec3f(NAN, NAN, NAN));
 	*comma[0] = '\0';
-	u.x = ft_atof(str);
+	u.x = ft_str_to_float(str);
 	*comma[0] = ',';
 	*comma[1] = '\0';
-	u.y = ft_atof(comma[0] + 1);
+	u.y = ft_str_to_float(comma[0] + 1);
 	*comma[1] = ',';
-	u.z = ft_atof(comma[1] + 1);
-	if (isnan(u.x) || isnan(u.y) || isnan(u.z))
+	u.z = ft_str_to_float(comma[1] + 1);
+	if (!isfinite(u.x) || !isfinite(u.y) || !isfinite(u.z))
 		return (ft_pstderr(__ERR_5), ft_vec3f(NAN, NAN, NAN));
 	return (u);
 }
