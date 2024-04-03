@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 15:00:15 by abenamar          #+#    #+#             */
-/*   Updated: 2024/04/01 00:58:46 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/04/02 23:52:34 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,16 @@ bool	ft_camera_init(t_scene *const scene, char *const *info)
 	scene->camera = malloc(sizeof(t_camera));
 	if (!scene->camera)
 		return (ft_pstderr(__ERR_2), false);
-	scene->camera->position = ft_vec3f_read(info[1]);
+	scene->camera->position = ft_str_to_vec3f(info[1]);
 	if (isnan(scene->camera->position.x))
 		return (false);
-	scene->camera->orientation = ft_vec3f_read(info[2]);
+	scene->camera->orientation = ft_str_to_vec3f(info[2]);
 	if (isnan(scene->camera->orientation.x)
 		|| !ft_vec3f_isnormalized(scene->camera->orientation))
 		return (false);
 	scene->camera->fov = __M_PIF / 180.0F * ft_atoi(info[3]);
 	if (signbit(scene->camera->fov) || scene->camera->fov > __M_PIF)
-		return (ft_pstderr(__ERR_11), false);
+		return (ft_pstderr(__ERR_12), false);
 	if (scene->camera->fov > __M_PIF - FLT_EPSILON)
 		scene->camera->fov = __M_PIF - FLT_EPSILON;
 	ft_camera_setup(scene->camera);
