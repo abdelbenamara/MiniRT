@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_color3f_read.c                                  :+:      :+:    :+:   */
+/*   ft_str_to_color3f.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 22:11:12 by abenamar          #+#    #+#             */
-/*   Updated: 2024/03/24 13:52:54 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/04/02 23:53:38 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-t_color3f	ft_color3f_read(char const *str)
+t_color3f	ft_str_to_color3f(char const *str)
 {
 	char			*comma[2];
 	t_color3f		rgb;
