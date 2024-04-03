@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 11:00:24 by abenamar          #+#    #+#             */
-/*   Updated: 2024/03/24 14:29:30 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/04/01 19:18:05 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static bool	ft_element_setup(t_scene *const scene, char *const *info)
 		+ 5 * !ft_strncmp(info[0], "pl", 3) \
 		+ 6 * !ft_strncmp(info[0], "cy", 3);
 	if (!id)
-		return (ft_pstderr(__ERR_12), false);
+		return (ft_pstderr(__ERR_13), false);
 	if (!ft_setup[id - 1](scene, info))
 		return (false);
 	return (true);
@@ -60,7 +60,7 @@ static bool	ft_scene_setup(t_scene *const scene, int const fd)
 		ft_tab_free(info);
 	}
 	if (scene->camera == NULL)
-		return (ft_pstderr(__ERR_14), false);
+		return (ft_pstderr(__ERR_15), false);
 	return (true);
 }
 
