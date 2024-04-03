@@ -6,7 +6,7 @@
 #    By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/28 18:35:02 by abenamar          #+#    #+#              #
-#    Updated: 2024/04/01 01:13:10 by abenamar         ###   ########.fr        #
+#    Updated: 2024/04/03 02:05:27 by abenamar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,29 +31,13 @@ LDLIBS += -lm
 
 # **************************************************************************** #
 #                                                                              #
-#                                    utils                                     #
-#                                                                              #
-# **************************************************************************** #
-
-SRC_UTILS := src/utils
-
-SRCS := $(SRC_UTILS)/ft_pstderr.c
-SRCS += $(SRC_UTILS)/ft_perror.c
-
-SRCS += $(SRC_UTILS)/ft_tab_free.c
-SRCS += $(SRC_UTILS)/ft_tab_size.c
-
-# **************************************************************************** #
-#                                                                              #
 #                                     math                                     #
 #                                                                              #
 # **************************************************************************** #
 
 SRC_MATH := src/math
 
-SRCS += $(SRC_MATH)/ft_atof.c
-
-SRCS += $(SRC_MATH)/ft_vec3f.c
+SRCS := $(SRC_MATH)/ft_vec3f.c
 SRCS += $(SRC_MATH)/ft_vec3f_sum.c
 SRCS += $(SRC_MATH)/ft_vec3f_diff.c
 SRCS += $(SRC_MATH)/ft_vec3f_prod.c
@@ -67,15 +51,30 @@ SRCS += $(SRC_MATH)/ft_quat4f_unit.c
 
 # **************************************************************************** #
 #                                                                              #
+#                                    utils                                     #
+#                                                                              #
+# **************************************************************************** #
+
+SRC_UTILS := src/utils
+
+SRCS += $(SRC_UTILS)/ft_pstderr.c
+SRCS += $(SRC_UTILS)/ft_perror.c
+
+SRCS += $(SRC_UTILS)/ft_tab_free.c
+SRCS += $(SRC_UTILS)/ft_tab_size.c
+
+SRCS += $(SRC_UTILS)/ft_str_to_float.c
+SRCS += $(SRC_UTILS)/ft_str_to_color3f.c
+SRCS += $(SRC_UTILS)/ft_str_to_vec3f.c
+SRCS += $(SRC_UTILS)/ft_vec3f_isnormalized.c
+
+# **************************************************************************** #
+#                                                                              #
 #                                    scene                                     #
 #                                                                              #
 # **************************************************************************** #
 
 SRC_SCENE := src/scene
-
-SRCS += $(SRC_SCENE)/ft_color3f_read.c
-SRCS += $(SRC_SCENE)/ft_vec3f_read.c
-SRCS += $(SRC_SCENE)/ft_vec3f_isnormalized.c
 
 SRCS += $(SRC_SCENE)/ft_ambiance_init.c
 SRCS += $(SRC_SCENE)/ft_camera_init.c
@@ -105,7 +104,6 @@ SRCS += $(SRC_RENDER)/ft_cylinder_hit.c
 
 SRCS += $(SRC_RENDER)/ft_pixel_put.c
 SRCS += $(SRC_RENDER)/ft_ray_tracing.c
-SRCS += $(SRC_RENDER)/ft_basis.c
 SRCS += $(SRC_RENDER)/ft_vec3f_rotate.c
 SRCS += $(SRC_RENDER)/ft_key_press.c
 
