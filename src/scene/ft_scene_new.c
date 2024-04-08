@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 11:00:24 by abenamar          #+#    #+#             */
-/*   Updated: 2024/04/01 19:18:05 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/04/08 14:24:10 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,5 +87,8 @@ t_scene	*ft_scene_new(char const *file)
 		return (ft_perror(file), ft_scene_free(scene), NULL);
 	if (!ready)
 		return (ft_scene_free(scene), NULL);
+	scene->focus.type = 0;
+	scene->focus.next = NULL;
+	ft_focus_camera(scene);
 	return (scene);
 }
