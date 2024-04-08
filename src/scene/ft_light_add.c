@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 12:48:21 by abenamar          #+#    #+#             */
-/*   Updated: 2024/04/03 00:27:55 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/04/08 14:37:17 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ bool	ft_light_add(t_scene *const scene, char *const *info)
 	t_light	*light;
 	t_list	*new;
 
+	if (scene->lights)
+		return (ft_pstderr(__ERR_3), false);
 	if (ft_tab_size(info) != 4)
 		return (ft_pstderr(__ERR_4), false);
 	light = malloc(sizeof(t_light));
