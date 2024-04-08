@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 16:56:20 by abenamar          #+#    #+#             */
-/*   Updated: 2024/04/01 01:03:34 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/04/07 20:34:34 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,17 @@ static float
 		ft_vec3f_dot(r.direction, cy->axis), ft_vec3f_dot(ob, cy->axis)
 	};
 	float const		nb = ft_vec3f_dot(ob, r.direction) - k[0] * k[1];
-	float const		c = ft_vec3f_dot(ob, ob) - k[1] * k[1] - cy->radius_squared;
+	float const		c = ft_vec3f_dot(ob, ob) \
+		- powf(k[1], 2.0F) - cy->radius.square;
 	float			a;
 	float			d;
 
 	if (!isfinite(nb) || !isfinite(c) || (signbit(nb) && c >= 0.0F))
 		return (NAN);
-	a = 1.0F - k[0] * k[0];
+	a = 1.0F - powf(k[0], 2.0F);
 	if (a <= FLT_EPSILON)
 		return (NAN);
-	d = nb * nb - a * c;
+	d = powf(nb, 2.0F) - a * c;
 	if (!isfinite(d) || signbit(d))
 		return (NAN);
 	if (c >= 0.0F)
@@ -41,22 +42,22 @@ static float
 	ft_caps_hit_t(t_cylinder *const cy, \
 		t_point3f const origin, float const da, t_vec3f *const center)
 {
-	float const	tt = ft_vec3f_dot(\
-		ft_vec3f_diff(cy->top, origin), cy->axis) / da;
-	float const	bt = ft_vec3f_dot(\
-		ft_vec3f_diff(cy->base, origin), cy->axis) / da;
+	float const	et = ft_vec3f_dot(\
+		ft_vec3f_diff(cy->arrow.end, origin), cy->axis) / da;
+	float const	st = ft_vec3f_dot(\
+		ft_vec3f_diff(cy->arrow.start, origin), cy->axis) / da;
 	float		t;
 
-	if (!isfinite(tt) || signbit(tt))
-		t = bt;
-	else if (!isfinite(bt) || signbit(bt))
-		t = tt;
+	if (!isfinite(et) || signbit(et))
+		t = st;
+	else if (!isfinite(st) || signbit(st))
+		t = et;
 	else
-		t = fminf(tt, bt);
-	if (t == tt)
-		*center = cy->top;
+		t = fminf(et, st);
+	if (t == et)
+		*center = cy->arrow.end;
 	else
-		*center = cy->base;
+		*center = cy->arrow.start;
 	return (t);
 }
 
@@ -75,7 +76,7 @@ static void	ft_caps_hit(t_cylinder *const cy, t_ray const r, t_hit *const h)
 		return ;
 	point = ft_vec3f_sum(r.origin, ft_vec3f_prod(r.direction, t));
 	cp = ft_vec3f_diff(point, center);
-	if (ft_vec3f_dot(cp, cp) > cy->radius_squared)
+	if (ft_vec3f_dot(cp, cp) > cy->radius.square)
 		return ;
 	h->t = t;
 	h->point = point;
@@ -89,7 +90,7 @@ static void	ft_caps_hit(t_cylinder *const cy, t_ray const r, t_hit *const h)
 void	ft_cylinder_hit(t_cylinder *const cy, t_ray const r, t_hit *const h)
 {
 	float const		t = ft_cylinder_hit_t(\
-		cy, r, ft_vec3f_diff(cy->base, r.origin));
+		cy, r, ft_vec3f_diff(cy->arrow.start, r.origin));
 	t_point3f		point;
 	float			d;
 
@@ -97,13 +98,13 @@ void	ft_cylinder_hit(t_cylinder *const cy, t_ray const r, t_hit *const h)
 	if (!isfinite(t) || signbit(t) || h->t <= t)
 		return ;
 	point = ft_vec3f_sum(r.origin, ft_vec3f_prod(r.direction, t));
-	d = ft_vec3f_dot(ft_vec3f_diff(cy->top, point), cy->axis);
-	if (signbit(d) || d > cy->height)
+	d = ft_vec3f_dot(ft_vec3f_diff(cy->arrow.end, point), cy->axis);
+	if (signbit(d) || d > cy->arrow.height)
 		return ;
 	h->t = t;
 	h->point = point;
 	h->normal = ft_face_normal(r.direction, ft_vec3f_prod(\
-		ft_vec3f_diff(h->point, ft_vec3f_sum(cy->base, \
-		ft_vec3f_prod(cy->axis, d))), cy->radius_reciprocal));
+		ft_vec3f_diff(h->point, ft_vec3f_sum(cy->arrow.start, \
+		ft_vec3f_prod(cy->axis, d))), cy->radius.reciprocal));
 	h->color = cy->color;
 }
