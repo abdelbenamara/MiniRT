@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 00:23:38 by abenamar          #+#    #+#             */
-/*   Updated: 2024/04/01 01:12:31 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/04/03 02:21:23 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,15 @@ static t_viewport	ft_viewport(t_camera const *const camera)
 	return (viewport);
 }
 
+static t_ray	ft_ray(t_point3f const origin, t_vec3f const direction)
+{
+	t_ray	r;
+
+	r.origin = origin;
+	r.direction = direction;
+	return (r);
+}
+
 static t_color3f	ft_hit_color(t_scene const *const scene, t_ray const r)
 {
 	t_hit	h;
@@ -49,8 +58,7 @@ static t_color3f	ft_hit_color(t_scene const *const scene, t_ray const r)
 	return (h.color);
 }
 
-static t_color3f
-	ft_super_sampling(t_scene const *const scene, int const i, int const j)
+t_color3f	ft_ray_tracing(t_scene const *const scene, int const i, int const j)
 {
 	t_viewport const	vp = ft_viewport(scene->camera);
 	t_point3f const		point = ft_vec3f_sum(vp.p00, ft_vec3f_sum(\
@@ -73,23 +81,4 @@ static t_color3f
 		++k;
 	}
 	return (color);
-}
-
-void	ft_ray_tracing(t_xclient const *const xclient)
-{
-	int					i;
-	int					j;
-
-	j = 0;
-	while (j < _HEIGHT)
-	{
-		i = 0;
-		while (i < _WIDTH)
-		{
-			ft_pixel_put(xclient, i, j, \
-				ft_super_sampling(xclient->scene, i, j));
-			++i;
-		}
-		++j;
-	}
 }
