@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 18:09:55 by abenamar          #+#    #+#             */
-/*   Updated: 2024/03/24 14:38:51 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/04/03 02:29:03 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,28 @@
 
 static int	ft_frame_render(t_xclient *const xclient)
 {
+	int					i;
+	int					j;
+
 	if (xclient->update)
 	{
-		ft_ray_tracing(xclient);
+		j = 0;
+		while (j < _HEIGHT)
+		{
+			i = 0;
+			while (i < _WIDTH)
+			{
+				ft_pixel_put(xclient, i, j, \
+					ft_ray_tracing(xclient->scene, i, j));
+				++i;
+			}
+			++j;
+		}
 		mlx_clear_window(xclient->mlx, xclient->win);
 		mlx_put_image_to_window(xclient->mlx, xclient->win, xclient->img, 0, 0);
-		xclient->update = 0;
+		xclient->update = false;
 	}
-	return (0);
+	return (EXIT_SUCCESS);
 }
 
 int	main(int ac, char **av)
@@ -41,11 +55,11 @@ int	main(int ac, char **av)
 	xclient = ft_xclient_new(scene);
 	if (!xclient)
 		return (1);
-	mlx_hook(xclient->win, DestroyNotify, ButtonReleaseMask, \
-		mlx_loop_end, xclient->mlx);
-	mlx_hook(xclient->win, KeyPress, KeyPressMask, \
-		ft_key_press, xclient);
+	mlx_hook(xclient->win, \
+		DestroyNotify, ButtonReleaseMask, mlx_loop_end, xclient->mlx);
+	mlx_hook(xclient->win, KeyPress, KeyPressMask, ft_key_press, xclient);
 	mlx_loop_hook(xclient->mlx, ft_frame_render, xclient);
 	mlx_loop(xclient->mlx);
-	return (ft_xclient_free(xclient), EXIT_SUCCESS);
+	ft_xclient_free(xclient);
+	return (EXIT_SUCCESS);
 }
