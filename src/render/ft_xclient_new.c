@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 18:21:54 by abenamar          #+#    #+#             */
-/*   Updated: 2024/03/24 14:42:46 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/04/04 01:41:20 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_xclient	*ft_xclient_new(t_scene *const scene)
 	xclient->mlx = mlx_init();
 	xclient->win = NULL;
 	xclient->img = NULL;
-	xclient->update = 1;
+	xclient->update = true;
 	xclient->scene = scene;
 	if (!xclient->mlx)
 		return (ft_pstderr(__ERR_2), ft_xclient_free(xclient), NULL);
