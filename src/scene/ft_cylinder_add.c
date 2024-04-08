@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 15:36:19 by abenamar          #+#    #+#             */
-/*   Updated: 2024/04/03 00:27:46 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/04/06 18:10:33 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,23 @@
 
 static bool	ft_cylinder_setup(t_cylinder *const cy, char *const *info)
 {
-	cy->radius = ft_str_to_float(info[3]);
-	if (!isfinite(cy->radius))
+	t_vec3f const	front = ft_vec3f(0.0F, 0.0F, 1.0F);
+
+	cy->arrow.height = ft_str_to_float(info[4]);
+	if (!isfinite(cy->arrow.height))
 		return (ft_pstderr(__ERR_5), false);
-	if (signbit(cy->radius))
-		return (ft_pstderr(__ERR_14), false);
-	cy->height = ft_str_to_float(info[4]);
-	if (!isfinite(cy->height))
-		return (ft_pstderr(__ERR_5), false);
-	if (signbit(cy->height))
+	if (signbit(cy->arrow.height))
 		return (ft_pstderr(__ERR_14), false);
 	cy->color = ft_str_to_color3f(info[5]);
 	if (isnan(cy->color.x))
 		return (false);
 	cy->axis = ft_vec3f_unit(cy->axis);
-	cy->top = ft_vec3f_sum(cy->base, \
-		ft_vec3f_prod(cy->axis, cy->height / 2.0F));
-	cy->base = ft_vec3f_diff(cy->top, \
-		ft_vec3f_prod(cy->axis, cy->height));
-	cy->radius *= 0.5F;
-	cy->radius_squared = cy->radius * cy->radius;
-	cy->radius_reciprocal = 1.0F / cy->radius;
+	cy->rotation.xyz = ft_vec3f_cross(front, cy->axis);
+	cy->rotation.w = sqrtf(1 + ft_vec3f_dot(front, cy->axis));
+	cy->rotation = ft_quat4f_unit(cy->rotation);
+	cy->axis = ft_vec3f_unit(ft_vec3f_rotate(front, cy->rotation));
+	cy->arrow = ft_arrow(cy->arrow.center, cy->axis, cy->arrow.height);
+	cy->radius = ft_radius(cy->radius.twice);
 	return (true);
 }
 
@@ -49,12 +45,17 @@ bool	ft_cylinder_add(t_scene *const scene, char *const *info)
 	new = ft_lstnew(cy);
 	if (!cy || !new)
 		return (ft_pstderr(__ERR_2), free(cy), free(new), false);
-	cy->base = ft_str_to_vec3f(info[1]);
-	if (isnan(cy->base.x))
+	cy->arrow.center = ft_str_to_vec3f(info[1]);
+	if (isnan(cy->arrow.center.x))
 		return (ft_lstdelone(new, free), false);
 	cy->axis = ft_str_to_vec3f(info[2]);
 	if (isnan(cy->axis.x) || !ft_vec3f_isnormalized(cy->axis))
 		return (ft_lstdelone(new, free), false);
+	cy->radius.twice = ft_str_to_float(info[3]);
+	if (!isfinite(cy->radius.twice))
+		return (ft_pstderr(__ERR_5), false);
+	if (signbit(cy->radius.twice))
+		return (ft_pstderr(__ERR_14), false);
 	if (!ft_cylinder_setup(cy, info))
 		return (ft_lstdelone(new, free), false);
 	ft_lstadd_front(&scene->cylinders, new);
