@@ -6,16 +6,18 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 13:46:16 by abenamar          #+#    #+#             */
-/*   Updated: 2024/04/07 20:32:38 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/04/23 20:40:51 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-void	ft_sphere_hit(t_sphere *const sp, t_ray const r, t_hit *const h)
+void
+	ft_sphere_hit(t_sphere const *const sp, \
+		t_ray const *const r, t_hit *const h)
 {
-	t_vec3f const	oc = ft_vec3f_diff(sp->center, r.origin);
-	float const		nb = ft_vec3f_dot(oc, r.direction);
+	t_vec3f const	oc = ft_vec3f_diff(sp->center, r->origin);
+	float const		nb = ft_vec3f_dot(oc, r->direction);
 	float const		c = ft_vec3f_dot(oc, oc) - sp->radius.square;
 	float			d;
 	float			t;
@@ -29,11 +31,11 @@ void	ft_sphere_hit(t_sphere *const sp, t_ray const r, t_hit *const h)
 		t = nb - sqrtf(d);
 	else
 		t = nb + sqrtf(d);
-	if (!isfinite(t) || signbit(t) || h->t <= t)
+	if (!isfinite(t) || signbit(t) || _SHADOW_BIAS >= t || t >= h->t)
 		return ;
 	h->t = t;
-	h->point = ft_vec3f_sum(r.origin, ft_vec3f_prod(r.direction, h->t));
-	h->normal = ft_face_normal(r.direction, ft_vec3f_prod(\
+	h->point = ft_vec3f_sum(r->origin, ft_vec3f_prod(r->direction, h->t));
+	h->normal = ft_face_normal(r->direction, ft_vec3f_prod(\
 		ft_vec3f_diff(h->point, sp->center), sp->radius.reciprocal));
 	h->color = sp->color;
 }
