@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 18:31:35 by abenamar          #+#    #+#             */
-/*   Updated: 2024/04/08 14:26:45 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/04/23 19:05:20 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,17 @@ static void	ft_focus_next(t_scene *const scene)
 		scene->focus.type = (scene->focus.type + 1) % 5;
 	if (scene->focus.type == 0)
 		return (ft_focus_camera(scene));
-	if (scene->focus.type == 1 && !scene->focus.next)
-		scene->focus.next = scene->lights;
-	else if (scene->focus.type == 2 && !scene->focus.next)
+	if (scene->focus.type == 1)
+		return (ft_focus_light(scene));
+	if (!scene->focus.next && scene->focus.type == 2)
 		scene->focus.next = scene->spheres;
-	else if (scene->focus.type == 3 && !scene->focus.next)
+	else if (!scene->focus.next && scene->focus.type == 3)
 		scene->focus.next = scene->planes;
-	else if (scene->focus.type == 4 && !scene->focus.next)
+	else if (!scene->focus.next && scene->focus.type == 4)
 		scene->focus.next = scene->cylinders;
 	if (!scene->focus.next)
-		ft_focus_next(scene);
-	if (scene->focus.type == 1)
-		ft_focus_light(scene);
-	else if (scene->focus.type == 2)
+		return (ft_focus_next(scene));
+	if (scene->focus.type == 2)
 		ft_focus_sphere(scene);
 	else if (scene->focus.type == 3)
 		ft_focus_plane(scene);
@@ -70,7 +68,7 @@ static bool	ft_key_resize(int const keycode, t_scene *const scene)
 
 static bool	ft_key_translate(int const keycode, t_scene *const scene)
 {
-	t_vec3f const	orthogonal[] = {
+	t_vec3f const	onb[] = {
 		ft_vec3f_cross(scene->camera->vup, scene->camera->orientation),
 		scene->camera->vup,
 		scene->camera->orientation
@@ -78,17 +76,17 @@ static bool	ft_key_translate(int const keycode, t_scene *const scene)
 	t_vec3f			axis;
 
 	if (keycode == XK_w)
-		axis = ft_vec3f_prod(orthogonal[2], -0.1F);
+		axis = ft_vec3f_prod(onb[2], -0.1F);
 	else if (keycode == XK_s)
-		axis = ft_vec3f_prod(orthogonal[2], 0.1F);
+		axis = ft_vec3f_prod(onb[2], 0.1F);
 	else if (keycode == XK_a)
-		axis = ft_vec3f_prod(orthogonal[0], -0.1F);
+		axis = ft_vec3f_prod(onb[0], -0.1F);
 	else if (keycode == XK_d)
-		axis = ft_vec3f_prod(orthogonal[0], 0.1F);
+		axis = ft_vec3f_prod(onb[0], 0.1F);
 	else if (keycode == XK_q)
-		axis = ft_vec3f_prod(orthogonal[1], -0.1F);
+		axis = ft_vec3f_prod(onb[1], -0.1F);
 	else if (keycode == XK_e)
-		axis = ft_vec3f_prod(orthogonal[1], 0.1F);
+		axis = ft_vec3f_prod(onb[1], 0.1F);
 	else
 		return (false);
 	*scene->focus.position = ft_vec3f_sum(*scene->focus.position, axis);
@@ -107,7 +105,7 @@ int	ft_key_press(int const keycode, t_xclient *const xclient)
 		|| ft_key_translate(keycode, xclient->scene)
 		|| ft_key_rotate(keycode, xclient->scene))
 	{
-		if (keycode != XK_i && keycode != XK_o && xclient->scene->focus.arrow)
+		if (xclient->scene->focus.arrow && keycode != XK_i && keycode != XK_o)
 			*xclient->scene->focus.arrow = ft_arrow(\
 				*xclient->scene->focus.position, \
 				*xclient->scene->focus.orientation, \
