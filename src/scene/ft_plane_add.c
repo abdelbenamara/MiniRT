@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 15:35:10 by abenamar          #+#    #+#             */
-/*   Updated: 2024/04/24 04:01:14 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/04/24 13:37:46 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,13 @@ bool	ft_plane_add(t_scene *const scene, char *const *info)
 	t_list	*new;
 
 	if (ft_tab_size(info) != 4)
-		return (ft_pstderr(__ERR_09), false);
+		return (ft_pstderr(__ERR_08), false);
 	pl = malloc(sizeof(t_plane));
 	if (!pl)
-		return (ft_pstderr(__ERR_07), false);
+		return (ft_pstderr(__ERR_06), false);
 	new = ft_lstnew(pl);
 	if (!new)
-		return (ft_pstderr(__ERR_07), free(pl), false);
+		return (ft_pstderr(__ERR_06), free(pl), false);
 	pl->point = ft_str_to_vec3f(info[1]);
 	if (isnan(pl->point.x))
 		return (ft_lstdelone(new, free), false);
