@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 11:00:24 by abenamar          #+#    #+#             */
-/*   Updated: 2024/04/24 04:01:14 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/04/24 13:42:11 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,17 @@ static bool	ft_ambiance_init(t_scene *const scene, char *const *info)
 	float	lratio;
 
 	if (scene->ambiance)
-		return (ft_pstderr(__ERR_08), false);
+		return (ft_pstderr(__ERR_07), false);
 	if (ft_tab_size(info) != 3)
-		return (ft_pstderr(__ERR_09), false);
+		return (ft_pstderr(__ERR_08), false);
 	scene->ambiance = malloc(sizeof(t_color3f));
 	if (!scene->ambiance)
-		return (ft_pstderr(__ERR_07), false);
+		return (ft_pstderr(__ERR_06), false);
 	lratio = ft_str_to_float(info[1]);
 	if (!isfinite(lratio))
 		return (ft_pstderr(__ERR_09), false);
 	if (signbit(lratio) || lratio > 1.0F)
-		return (ft_pstderr(__ERR_11), false);
+		return (ft_pstderr(__ERR_10), false);
 	*scene->ambiance = ft_str_to_color3f(info[2]);
 	if (isnan(scene->ambiance->x))
 		return (false);
@@ -54,7 +54,7 @@ static bool	ft_element_setup(t_scene *const scene, char *const *info)
 		+ 5 * !ft_strncmp(info[0], "pl", 3) \
 		+ 6 * !ft_strncmp(info[0], "cy", 3);
 	if (!id)
-		return (ft_pstderr(__ERR_18), false);
+		return (ft_pstderr(__ERR_17), false);
 	if (!ft_setup[id - 1](scene, info))
 		return (false);
 	return (true);
@@ -75,7 +75,7 @@ static bool	ft_scene_setup(t_scene *const scene, int const fd)
 			while (line)
 				(free(line), line = get_next_line(fd));
 			if (!info)
-				return (ft_pstderr(__ERR_07), false);
+				return (ft_pstderr(__ERR_06), false);
 			return (ft_tab_free(info), false);
 		}
 		free(line);
@@ -85,7 +85,7 @@ static bool	ft_scene_setup(t_scene *const scene, int const fd)
 	if (scene->ambiance == NULL
 		|| scene->camera == NULL
 		|| scene->light == NULL)
-		return (ft_pstderr(__ERR_20), false);
+		return (ft_pstderr(__ERR_19), false);
 	return (true);
 }
 
@@ -97,7 +97,7 @@ t_scene	*ft_scene_new(char const *file)
 
 	scene = malloc(sizeof(t_scene));
 	if (!scene)
-		return (ft_pstderr(__ERR_07), NULL);
+		return (ft_pstderr(__ERR_06), NULL);
 	scene->ambiance = NULL;
 	scene->camera = NULL;
 	scene->light = NULL;
