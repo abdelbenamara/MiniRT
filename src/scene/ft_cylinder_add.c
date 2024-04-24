@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 15:36:19 by abenamar          #+#    #+#             */
-/*   Updated: 2024/04/24 04:01:14 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/04/24 13:41:57 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,12 @@ static bool	ft_cylinder_setup(t_cylinder *const cy, char *const *info)
 	if (!isfinite(cy->radius.twice))
 		return (ft_pstderr(__ERR_09), false);
 	if (signbit(cy->radius.twice))
-		return (ft_pstderr(__ERR_19), false);
+		return (ft_pstderr(__ERR_18), false);
 	cy->arrow.height = ft_str_to_float(info[4]);
 	if (!isfinite(cy->arrow.height))
 		return (ft_pstderr(__ERR_09), false);
 	if (signbit(cy->arrow.height))
-		return (ft_pstderr(__ERR_19), false);
+		return (ft_pstderr(__ERR_18), false);
 	cy->color = ft_str_to_color3f(info[5]);
 	if (isnan(cy->color.x))
 		return (false);
@@ -45,13 +45,13 @@ bool	ft_cylinder_add(t_scene *const scene, char *const *info)
 	t_list		*new;
 
 	if (ft_tab_size(info) != 6)
-		return (ft_pstderr(__ERR_09), false);
+		return (ft_pstderr(__ERR_08), false);
 	cy = malloc(sizeof(t_cylinder));
 	if (!cy)
-		return (ft_pstderr(__ERR_07), false);
+		return (ft_pstderr(__ERR_06), false);
 	new = ft_lstnew(cy);
 	if (!new)
-		return (ft_pstderr(__ERR_07), free(cy), false);
+		return (ft_pstderr(__ERR_06), free(cy), false);
 	cy->arrow.center = ft_str_to_vec3f(info[1]);
 	if (isnan(cy->arrow.center.x))
 		return (ft_lstdelone(new, free), false);
