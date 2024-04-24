@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 22:11:12 by abenamar          #+#    #+#             */
-/*   Updated: 2024/04/23 20:49:31 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/04/24 13:45:03 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,12 @@ t_color3f	ft_str_to_color3f(char const *str)
 	if (comma[0])
 		comma[1] = ft_strchr(comma[0] + 1, ',');
 	if (!comma[1] || ft_strchr(comma[1] + 1, ','))
-		return (ft_pstderr(__ERR_12), ft_vec3f(NAN, NAN, NAN));
+		return (ft_pstderr(__ERR_11), ft_vec3f(NAN, NAN, NAN));
 	rgb.x = ft_atoi(str);
 	rgb.y = ft_atoi(comma[0] + 1);
 	rgb.z = ft_atoi(comma[1] + 1);
 	if (signbit(rgb.x) || signbit(rgb.y) || signbit(rgb.z)
 		|| rgb.x > 255.0F || rgb.y > 255.0F || rgb.z > 255.0F)
-		return (ft_pstderr(__ERR_13), ft_vec3f(NAN, NAN, NAN));
+		return (ft_pstderr(__ERR_12), ft_vec3f(NAN, NAN, NAN));
 	return (ft_vec3f_prod(rgb, 1.0F / 255.0F));
 }
