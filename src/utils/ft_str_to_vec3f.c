@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 11:55:24 by abenamar          #+#    #+#             */
-/*   Updated: 2024/04/23 20:49:13 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/04/24 13:44:59 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_vec3f	ft_str_to_vec3f(char const *str)
 	if (comma[0])
 		comma[1] = ft_strchr(comma[0] + 1, ',');
 	if (!comma[1] || ft_strchr(comma[1] + 1, ','))
-		return (ft_pstderr(__ERR_14), ft_vec3f(NAN, NAN, NAN));
+		return (ft_pstderr(__ERR_13), ft_vec3f(NAN, NAN, NAN));
 	*comma[0] = '\0';
 	u.x = ft_str_to_float(str);
 	*comma[0] = ',';
