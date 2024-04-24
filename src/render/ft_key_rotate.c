@@ -6,13 +6,13 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 22:30:52 by abenamar          #+#    #+#             */
-/*   Updated: 2024/04/08 13:54:32 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/04/20 18:49:30 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-static bool	ft_is_rotation(int const keycode, t_quat4f *qrot)
+static bool	ft_isrotated(int const keycode, t_quat4f *qrot)
 {
 	static float const	hagl = __M_PIF / 360.0F;
 	static float const	nhagl = __M_PIF / -360.0F;
@@ -45,7 +45,7 @@ bool	ft_key_rotate(int const keycode, t_scene *const scene)
 
 	if (!scene->focus.rotation)
 		return (false);
-	if (!ft_is_rotation(keycode, &qrot))
+	if (!ft_isrotated(keycode, &qrot))
 		return (false);
 	*scene->focus.rotation = ft_quat4f_unit(\
 		ft_quat4f_prod(*scene->focus.rotation, qrot));
