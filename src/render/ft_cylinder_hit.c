@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 16:56:20 by abenamar          #+#    #+#             */
-/*   Updated: 2024/04/23 20:40:51 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/04/24 13:50:01 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ static void
 	if (fabsf(da) <= FLT_EPSILON)
 		return ;
 	t = ft_caps_hit_t(cy, r, da, &center);
-	if (!isfinite(t) || signbit(t) || _SHADOW_BIAS >= t || t >= h->t)
+	if (!isfinite(t) || signbit(t) || h->bias >= t || t >= h->t)
 		return ;
 	point = ft_vec3f_sum(r->origin, ft_vec3f_prod(r->direction, t));
 	cp = ft_vec3f_diff(point, center);
@@ -100,7 +100,7 @@ void
 	float			d;
 
 	ft_caps_hit(cy, r, h);
-	if (!isfinite(t) || signbit(t) || _SHADOW_BIAS >= t || t >= h->t)
+	if (!isfinite(t) || signbit(t) || h->bias >= t || t >= h->t)
 		return ;
 	point = ft_vec3f_sum(r->origin, ft_vec3f_prod(r->direction, t));
 	d = ft_vec3f_dot(ft_vec3f_diff(point, cy->arrow.start), cy->axis);
