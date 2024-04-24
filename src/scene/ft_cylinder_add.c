@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 15:36:19 by abenamar          #+#    #+#             */
-/*   Updated: 2024/04/06 18:10:33 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/04/24 04:01:14 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,16 @@ static bool	ft_cylinder_setup(t_cylinder *const cy, char *const *info)
 {
 	t_vec3f const	front = ft_vec3f(0.0F, 0.0F, 1.0F);
 
+	cy->radius.twice = ft_str_to_float(info[3]);
+	if (!isfinite(cy->radius.twice))
+		return (ft_pstderr(__ERR_09), false);
+	if (signbit(cy->radius.twice))
+		return (ft_pstderr(__ERR_19), false);
 	cy->arrow.height = ft_str_to_float(info[4]);
 	if (!isfinite(cy->arrow.height))
-		return (ft_pstderr(__ERR_5), false);
+		return (ft_pstderr(__ERR_09), false);
 	if (signbit(cy->arrow.height))
-		return (ft_pstderr(__ERR_14), false);
+		return (ft_pstderr(__ERR_19), false);
 	cy->color = ft_str_to_color3f(info[5]);
 	if (isnan(cy->color.x))
 		return (false);
@@ -40,22 +45,19 @@ bool	ft_cylinder_add(t_scene *const scene, char *const *info)
 	t_list		*new;
 
 	if (ft_tab_size(info) != 6)
-		return (ft_pstderr(__ERR_4), false);
+		return (ft_pstderr(__ERR_09), false);
 	cy = malloc(sizeof(t_cylinder));
+	if (!cy)
+		return (ft_pstderr(__ERR_07), false);
 	new = ft_lstnew(cy);
-	if (!cy || !new)
-		return (ft_pstderr(__ERR_2), free(cy), free(new), false);
+	if (!new)
+		return (ft_pstderr(__ERR_07), free(cy), false);
 	cy->arrow.center = ft_str_to_vec3f(info[1]);
 	if (isnan(cy->arrow.center.x))
 		return (ft_lstdelone(new, free), false);
 	cy->axis = ft_str_to_vec3f(info[2]);
-	if (isnan(cy->axis.x) || !ft_vec3f_isnormalized(cy->axis))
+	if (isnan(cy->axis.x) || !ft_vec3f_isnormalized(&cy->axis))
 		return (ft_lstdelone(new, free), false);
-	cy->radius.twice = ft_str_to_float(info[3]);
-	if (!isfinite(cy->radius.twice))
-		return (ft_pstderr(__ERR_5), false);
-	if (signbit(cy->radius.twice))
-		return (ft_pstderr(__ERR_14), false);
 	if (!ft_cylinder_setup(cy, info))
 		return (ft_lstdelone(new, free), false);
 	ft_lstadd_front(&scene->cylinders, new);
