@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 18:09:55 by abenamar          #+#    #+#             */
-/*   Updated: 2024/04/24 04:01:14 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/04/24 14:14:48 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 static bool	ft_program_isvalid(char const *filename)
 {
-	int const	inum[] = {_WIDTH, _HEIGHT, _SAMPLES_PER_PIXEL, _MAX_DEPTH};
-	float const	fnum = _SHADOW_BIAS;
-	char		*extension;
+	int const			inum[] = {_WIDTH, _HEIGHT, _SAMPLES_PER_PIXEL};
+	float const			fnum = _SHADOW_BIAS;
+	char const *const	extension = ft_strrchr(filename, '.');
 
 	if (inum[0] <= 0)
 		return (ft_pstderr(__ERR_01), false);
@@ -24,13 +24,10 @@ static bool	ft_program_isvalid(char const *filename)
 		return (ft_pstderr(__ERR_02), false);
 	if (inum[2] <= 0)
 		return (ft_pstderr(__ERR_03), false);
-	if (inum[3] < 0)
-		return (ft_pstderr(__ERR_04), false);
 	if (signbit(fnum))
-		return (ft_pstderr(__ERR_05), false);
-	extension = ft_strrchr(filename, '.');
+		return (ft_pstderr(__ERR_04), false);
 	if (!extension || ft_strncmp(extension, ".rt", 4))
-		return (ft_pstderr(__ERR_07), false);
+		return (ft_pstderr(__ERR_05), false);
 	return (true);
 }
 
