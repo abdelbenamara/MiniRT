@@ -6,7 +6,7 @@
 #    By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/28 18:35:02 by abenamar          #+#    #+#              #
-#    Updated: 2024/04/08 14:42:43 by abenamar         ###   ########.fr        #
+#    Updated: 2024/04/24 04:09:57 by abenamar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -68,9 +68,9 @@ SRCS += $(SRC_UTILS)/ft_str_to_color3f.c
 SRCS += $(SRC_UTILS)/ft_str_to_vec3f.c
 SRCS += $(SRC_UTILS)/ft_vec3f_isnormalized.c
 SRCS += $(SRC_UTILS)/ft_vec3f_rotate.c
-
 SRCS += $(SRC_UTILS)/ft_radius.c
 SRCS += $(SRC_UTILS)/ft_arrow.c
+SRCS += $(SRC_UTILS)/ft_random_float.c
 
 # **************************************************************************** #
 #                                                                              #
@@ -80,9 +80,8 @@ SRCS += $(SRC_UTILS)/ft_arrow.c
 
 SRC_SCENE := src/scene
 
-SRCS += $(SRC_SCENE)/ft_ambiance_init.c
 SRCS += $(SRC_SCENE)/ft_camera_init.c
-SRCS += $(SRC_SCENE)/ft_light_add.c
+SRCS += $(SRC_SCENE)/ft_light_init.c
 SRCS += $(SRC_SCENE)/ft_sphere_add.c
 SRCS += $(SRC_SCENE)/ft_plane_add.c
 SRCS += $(SRC_SCENE)/ft_cylinder_add.c
@@ -111,8 +110,9 @@ SRCS += $(SRC_RENDER)/ft_face_normal.c
 SRCS += $(SRC_RENDER)/ft_sphere_hit.c
 SRCS += $(SRC_RENDER)/ft_plane_hit.c
 SRCS += $(SRC_RENDER)/ft_cylinder_hit.c
-SRCS += $(SRC_RENDER)/ft_pixel_put.c
+SRCS += $(SRC_RENDER)/ft_hit_color.c
 SRCS += $(SRC_RENDER)/ft_ray_tracing.c
+SRCS += $(SRC_RENDER)/ft_pixel_put.c
 
 SRCS += $(SRC_RENDER)/ft_key_rotate.c
 SRCS += $(SRC_RENDER)/ft_key_press.c
