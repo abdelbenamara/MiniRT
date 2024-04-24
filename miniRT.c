@@ -6,16 +6,38 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 18:09:55 by abenamar          #+#    #+#             */
-/*   Updated: 2024/04/03 02:29:03 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/04/24 04:01:14 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
+static bool	ft_program_isvalid(char const *filename)
+{
+	int const	inum[] = {_WIDTH, _HEIGHT, _SAMPLES_PER_PIXEL, _MAX_DEPTH};
+	float const	fnum = _SHADOW_BIAS;
+	char		*extension;
+
+	if (inum[0] <= 0)
+		return (ft_pstderr(__ERR_01), false);
+	if (inum[1] <= 0)
+		return (ft_pstderr(__ERR_02), false);
+	if (inum[2] <= 0)
+		return (ft_pstderr(__ERR_03), false);
+	if (inum[3] < 0)
+		return (ft_pstderr(__ERR_04), false);
+	if (signbit(fnum))
+		return (ft_pstderr(__ERR_05), false);
+	extension = ft_strrchr(filename, '.');
+	if (!extension || ft_strncmp(extension, ".rt", 4))
+		return (ft_pstderr(__ERR_07), false);
+	return (true);
+}
+
 static int	ft_frame_render(t_xclient *const xclient)
 {
-	int					i;
-	int					j;
+	int	i;
+	int	j;
 
 	if (xclient->update)
 	{
@@ -31,7 +53,6 @@ static int	ft_frame_render(t_xclient *const xclient)
 			}
 			++j;
 		}
-		mlx_clear_window(xclient->mlx, xclient->win);
 		mlx_put_image_to_window(xclient->mlx, xclient->win, xclient->img, 0, 0);
 		xclient->update = false;
 	}
@@ -40,21 +61,19 @@ static int	ft_frame_render(t_xclient *const xclient)
 
 int	main(int ac, char **av)
 {
-	char		*fext;
 	t_scene		*scene;
 	t_xclient	*xclient;
 
 	if (ac < 2)
 		return (ft_pstderr(__USAGE), 2);
-	fext = ft_strrchr(av[1], '.');
-	if (!fext || ft_strncmp(fext, ".rt", 4))
-		return (ft_pstderr(__ERR_1), EXIT_FAILURE);
+	if (!ft_program_isvalid(av[1]))
+		return (EXIT_FAILURE);
 	scene = ft_scene_new(av[1]);
 	if (!scene)
-		return (1);
+		return (EXIT_FAILURE);
 	xclient = ft_xclient_new(scene);
 	if (!xclient)
-		return (1);
+		return (EXIT_FAILURE);
 	mlx_hook(xclient->win, \
 		DestroyNotify, ButtonReleaseMask, mlx_loop_end, xclient->mlx);
 	mlx_hook(xclient->win, KeyPress, KeyPressMask, ft_key_press, xclient);
