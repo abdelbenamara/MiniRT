@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 18:08:16 by abenamar          #+#    #+#             */
-/*   Updated: 2024/04/24 04:09:55 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/04/24 14:11:41 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,23 +65,22 @@ t_quat4f	ft_quat4f_unit(t_quat4f const q);
 # define __ERR_01	"Error: invalid window width (not greater to 0)\n"
 # define __ERR_02	"Error: invalid window height (not greater to 0)\n"
 # define __ERR_03	"Error: invalid samples per pixel (not greater to 0)\n"
-# define __ERR_04	"Error: invalid max depth (not greater or equal to 0)\n"
-# define __ERR_05	"Error: invalid shadow bias (not greater or equal to 0)\n"
-# define __ERR_06	"Error: wrong file extension (not *.rt)\n"
-# define __ERR_07	"Error: out of memory\n"
-# define __ERR_08	"Error: duplicated capital identifier (not unique A,C,L)\n"
-# define __ERR_09	"Error: wrong number of element informations\n"
-# define __ERR_10	"Error: wrong floating-point value (not finite number)\n"
-# define __ERR_11	"Error: invalid lightning ratio (not in range [0,1])\n"
-# define __ERR_12	"Error: wrong number of RGB colors (not exactly 3)\n"
-# define __ERR_13	"Error: invalid RGB value (not in range [0,255])\n"
-# define __ERR_14	"Error: wrong number of 3D coordinates (not exactly 3)\n"
-# define __ERR_15	"Error: invalid normalized value (not in range [-1,1])\n"
-# define __ERR_16	"Error: forbidden null vector (not normalized vector)\n"
-# define __ERR_17	"Error: invalid field of view (not in range [0,180])\n"
-# define __ERR_18	"Error: wrong element identifier (not A,C,L,sp,pl,cy)\n"
-# define __ERR_19	"Error: invalid distance (not greater or equal to 0)\n"
-# define __ERR_20	"Error: missing capital identifier (not one of A,C,L)\n"
+# define __ERR_04	"Error: invalid shadow bias (not greater or equal to 0)\n"
+# define __ERR_05	"Error: wrong file extension (not *.rt)\n"
+# define __ERR_06	"Error: out of memory\n"
+# define __ERR_07	"Error: duplicated capital identifier (not unique A,C,L)\n"
+# define __ERR_08	"Error: wrong number of element informations\n"
+# define __ERR_09	"Error: wrong floating-point value (not finite number)\n"
+# define __ERR_10	"Error: invalid lightning ratio (not in range [0,1])\n"
+# define __ERR_11	"Error: wrong number of RGB colors (not exactly 3)\n"
+# define __ERR_12	"Error: invalid RGB value (not in range [0,255])\n"
+# define __ERR_13	"Error: wrong number of 3D coordinates (not exactly 3)\n"
+# define __ERR_14	"Error: invalid normalized value (not in range [-1,1])\n"
+# define __ERR_15	"Error: forbidden null vector (not normalized vector)\n"
+# define __ERR_16	"Error: invalid field of view (not in range [0,180])\n"
+# define __ERR_17	"Error: wrong element identifier (not A,C,L,sp,pl,cy)\n"
+# define __ERR_18	"Error: invalid distance (not greater or equal to 0)\n"
+# define __ERR_19	"Error: missing capital identifier (not one of A,C,L)\n"
 
 typedef struct s_radius
 {
@@ -129,7 +128,6 @@ t_vec3f		ft_vec3f_rotate(t_vec3f const u, t_quat4f const q);
 t_radius	ft_radius(float const diameter);
 t_arrow		ft_arrow(t_point3f const center, \
 				t_vec3f const axis, float const height);
-float		ft_random_float(float const min, float const max);
 
 /* ************************************************************************** */
 /*                                                                            */
@@ -225,10 +223,6 @@ t_scene		*ft_scene_new(char const *file);
 #  define _SAMPLES_PER_PIXEL	1
 # endif
 
-# ifndef _MAX_DEPTH
-#  define _MAX_DEPTH			1
-# endif
-
 # ifndef _SHADOW_BIAS
 #  define _SHADOW_BIAS			1.0E-4F
 # endif
@@ -264,6 +258,7 @@ typedef struct s_ray
 typedef struct s_hit
 {
 	float		t;
+	float		bias;
 	t_point3f	point;
 	t_vec3f		normal;
 	t_color3f	color;
@@ -279,8 +274,6 @@ void		ft_plane_hit(t_plane const *const pl, \
 				t_ray const *const r, t_hit *const h);
 void		ft_cylinder_hit(t_cylinder const *const cy, \
 				t_ray const *const r, t_hit *const h);
-t_color3f	ft_hit_color(t_scene const *const scene, t_point3f const origin, \
-				t_vec3f const direction, int const depth);
 t_color3f	ft_ray_tracing(t_scene const *const scene, \
 				int const i, int const j);
 void		ft_pixel_put(t_xclient const *const xclient, \
