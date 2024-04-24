@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 15:00:15 by abenamar          #+#    #+#             */
-/*   Updated: 2024/04/02 23:52:34 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/04/24 04:01:14 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,22 +29,22 @@ static void	ft_camera_setup(t_camera *const camera)
 bool	ft_camera_init(t_scene *const scene, char *const *info)
 {
 	if (scene->camera)
-		return (ft_pstderr(__ERR_3), false);
+		return (ft_pstderr(__ERR_08), false);
 	if (ft_tab_size(info) != 4)
-		return (ft_pstderr(__ERR_4), false);
+		return (ft_pstderr(__ERR_09), false);
 	scene->camera = malloc(sizeof(t_camera));
 	if (!scene->camera)
-		return (ft_pstderr(__ERR_2), false);
+		return (ft_pstderr(__ERR_07), false);
 	scene->camera->position = ft_str_to_vec3f(info[1]);
 	if (isnan(scene->camera->position.x))
 		return (false);
 	scene->camera->orientation = ft_str_to_vec3f(info[2]);
 	if (isnan(scene->camera->orientation.x)
-		|| !ft_vec3f_isnormalized(scene->camera->orientation))
+		|| !ft_vec3f_isnormalized(&scene->camera->orientation))
 		return (false);
 	scene->camera->fov = __M_PIF / 180.0F * ft_atoi(info[3]);
 	if (signbit(scene->camera->fov) || scene->camera->fov > __M_PIF)
-		return (ft_pstderr(__ERR_12), false);
+		return (ft_pstderr(__ERR_17), false);
 	if (scene->camera->fov > __M_PIF - FLT_EPSILON)
 		scene->camera->fov = __M_PIF - FLT_EPSILON;
 	ft_camera_setup(scene->camera);
