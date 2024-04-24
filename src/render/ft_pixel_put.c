@@ -6,38 +6,31 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 18:19:40 by abenamar          #+#    #+#             */
-/*   Updated: 2024/03/24 14:36:38 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/04/23 15:33:25 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-static float	ft_scale(int const samples_per_pixel)
+static float	ft_gamma_clamp(float const d)
 {
-	if (samples_per_pixel > 0)
-		return (1.0F / samples_per_pixel);
-	return (1.0F);
-}
-
-static float	ft_clamp(float const d, float const min, float const max)
-{
-	if (d < min)
-		return (min);
-	if (d > max)
-		return (max);
-	return (d);
+	if (isnan(d) || signbit(d) || d < 0.000F)
+		return (0.0F);
+	if (d > 0.999F)
+		return (0.999F);
+	return (sqrtf(d));
 }
 
 static int	ft_color_rgb(t_color3f const color)
 {
-	float const	scale = ft_scale(_SAMPLES_PER_PIXEL);
-	int			r;
-	int			g;
-	int			b;
+	static float const	scale = 1.0F / (float) _SAMPLES_PER_PIXEL;
+	int					r;
+	int					g;
+	int					b;
 
-	r = 256 * ft_clamp(sqrtf(color.x * scale), 0.000F, 0.999F);
-	g = 256 * ft_clamp(sqrtf(color.y * scale), 0.000F, 0.999F);
-	b = 256 * ft_clamp(sqrtf(color.z * scale), 0.000F, 0.999F);
+	r = 256 * ft_gamma_clamp(color.x * scale);
+	g = 256 * ft_gamma_clamp(color.y * scale);
+	b = 256 * ft_gamma_clamp(color.z * scale);
 	return (r << 16 | g << 8 | b);
 }
 
