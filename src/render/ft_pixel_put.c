@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 18:19:40 by abenamar          #+#    #+#             */
-/*   Updated: 2024/04/26 14:02:07 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/04/26 14:14:31 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static float	ft_gamma_clamp(float const value)
 {
-	if (isnan(value) || signbit(value) || value < 0.000F)
+	if (isnan(value) || signbit(value))
 		return (0.0F);
 	if (value > 0.999F)
 		return (0.999F);
