@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 00:23:38 by abenamar          #+#    #+#             */
-/*   Updated: 2024/04/24 14:03:42 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/04/26 13:59:25 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,29 +60,29 @@ static t_color3f
 		t_point3f const origin, t_vec3f const direction)
 {
 	t_hit		h[2];
-	t_vec3f		dir;
-	float		d2cr[3];
+	t_vec3f		lightdir;
+	float		ld2cosr[3];
 	t_color3f	ambient;
 
 	if (!ft_scene_hit(scene, origin, direction, h))
 		return (ft_vec3f(0.0F, 0.0F, 0.0F));
-	dir = ft_vec3f_diff(scene->light->position, h->point);
-	d2cr[0] = ft_vec3f_dot(dir, dir);
-	dir = ft_vec3f_unit(dir);
-	d2cr[1] = ft_vec3f_dot(dir, h->normal);
+	lightdir = ft_vec3f_diff(scene->light->position, h->point);
+	ld2cosr[0] = ft_vec3f_dot(lightdir, lightdir);
+	lightdir = ft_vec3f_unit(lightdir);
+	ld2cosr[1] = ft_vec3f_dot(lightdir, h->normal);
 	ambient = ft_vec3f(scene->ambiance->x * h->color.x, \
 		scene->ambiance->y * h->color.y, scene->ambiance->z * h->color.z);
-	if (signbit(d2cr[1]) || (ft_scene_hit(scene, h->point, dir, h + 1)
-			&& h[1].t * h[1].t < d2cr[0]))
+	if (signbit(ld2cosr[1]) || (ft_scene_hit(scene, h->point, lightdir, h + 1)
+			&& h[1].t * h[1].t < ld2cosr[0]))
 		return (ambient);
-	d2cr[2] = d2cr[1] * scene->light->brightness;
+	ld2cosr[2] = ld2cosr[1] * scene->light->brightness;
 	return (ft_vec3f_sum(ambient, \
-		ft_vec3f_prod(h->color, fmaxf(d2cr[2], d2cr[2] / d2cr[0]))));
+		ft_vec3f_prod(h->color, fmaxf(ld2cosr[2], ld2cosr[2] / ld2cosr[0]))));
 }
 
 static float	ft_random_float(float const min, float const max)
 {
-	static float const	rand_max_reciprocal = 1.0F / (RAND_MAX + 1.0F);
+	static float const	rand_max_reciprocal = 1.0F / ((float) RAND_MAX + 1.0F);
 
 	return (min + (max - min) * rand() * rand_max_reciprocal);
 }
