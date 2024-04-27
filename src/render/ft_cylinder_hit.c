@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 16:56:20 by abenamar          #+#    #+#             */
-/*   Updated: 2024/04/24 13:50:01 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/04/27 16:24:01 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static float
 	ft_cylinder_hit_t(t_cylinder const *const cy, \
-		t_ray const *const r, t_vec3f const ob)
+		t_ray const *const r, t_vec3f const ob, t_hit const *const h)
 {
 	float const		k[2] = {
 		ft_vec3f_dot(r->direction, cy->axis), ft_vec3f_dot(ob, cy->axis)
@@ -25,7 +25,7 @@ static float
 	float			a;
 	float			d;
 
-	if (!isfinite(nb) || !isfinite(c) || (signbit(nb) && c >= 0.0F))
+	if (!isfinite(nb) || !isfinite(c) || (signbit(nb) && c >= h->bias))
 		return (NAN);
 	a = 1.0F - powf(k[0], 2.0F);
 	if (a <= FLT_EPSILON)
@@ -33,7 +33,7 @@ static float
 	d = powf(nb, 2.0F) - a * c;
 	if (!isfinite(d) || signbit(d))
 		return (NAN);
-	if (c >= 0.0F)
+	if (c >= h->bias)
 		return ((nb - sqrtf(d)) / a);
 	else
 		return ((nb + sqrtf(d)) / a);
@@ -49,9 +49,9 @@ static float
 		ft_vec3f_diff(cy->arrow.start, r->origin), cy->axis) / da;
 	float		t;
 
-	if (!isfinite(et) || signbit(et))
+	if (!isfinite(et) || signbit(et) || _SHADOW_BIAS >= et)
 		t = st;
-	else if (!isfinite(st) || signbit(st))
+	else if (!isfinite(st) || signbit(st) || _SHADOW_BIAS >= st)
 		t = et;
 	else
 		t = fminf(et, st);
@@ -95,7 +95,7 @@ void
 		t_ray const *const r, t_hit *const h)
 {
 	float const		t = ft_cylinder_hit_t(\
-		cy, r, ft_vec3f_diff(cy->arrow.start, r->origin));
+		cy, r, ft_vec3f_diff(cy->arrow.start, r->origin), h);
 	t_point3f		point;
 	float			d;
 
