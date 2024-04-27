@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 00:23:38 by abenamar          #+#    #+#             */
-/*   Updated: 2024/04/26 13:59:25 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/04/27 09:27:23 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,19 +93,19 @@ t_color3f	ft_ray_tracing(t_scene const *const scene, int const i, int const j)
 	t_point3f const		target = ft_vec3f_sum(vp.p00, \
 		ft_vec3f_sum(ft_vec3f_prod(vp.pdu, i), ft_vec3f_prod(vp.pdv, j)));
 	t_vec3f const		origin = scene->camera->position;
-	int					k;
+	int					spp;
 	t_color3f			color;
 
 	color = ft_hit_color(scene, origin, \
 		ft_vec3f_unit(ft_vec3f_diff(target, origin)));
-	k = 1;
-	while (k < _SAMPLES_PER_PIXEL)
+	spp = 1;
+	while (spp < _SAMPLES_PER_PIXEL)
 	{
 		color = ft_vec3f_sum(color, ft_hit_color(scene, origin, \
 			ft_vec3f_unit(ft_vec3f_diff(ft_vec3f_sum(target, \
 			ft_vec3f_sum(ft_vec3f_prod(vp.pdu, ft_random_float(-0.5F, 0.5F)), \
 			ft_vec3f_prod(vp.pdv, ft_random_float(-0.5F, 0.5F)))), origin))));
-		++k;
+		++spp;
 	}
 	return (color);
 }
