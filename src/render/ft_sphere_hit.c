@@ -6,7 +6,7 @@
 /*   By: abenamar <abenamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 13:46:16 by abenamar          #+#    #+#             */
-/*   Updated: 2024/04/24 13:49:48 by abenamar         ###   ########.fr       */
+/*   Updated: 2024/04/27 13:35:25 by abenamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,12 @@ void
 	float			d;
 	float			t;
 
-	if (!isfinite(nb) || !isfinite(c) || (signbit(nb) && c >= 0.0F))
+	if (!isfinite(nb) || !isfinite(c) || (signbit(nb) && c >= h->bias))
 		return ;
 	d = powf(nb, 2.0F) - c;
 	if (!isfinite(d) || signbit(d))
 		return ;
-	if (c >= 0.0F)
+	if (c >= h->bias)
 		t = nb - sqrtf(d);
 	else
 		t = nb + sqrtf(d);
